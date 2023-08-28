@@ -1,0 +1,24 @@
+# Core dependencies
+langchain
+streamlit
+PyPDF2==3.0.1
+python-dotenv==1.0.0
+openai==0.27.6
+faiss-cpu==1.7.4
+
+#voice
+elevenlabs
+ffmpeg
+
+# Miscellaneous 
+tiktoken
+
+# Tools
+google-search-results
+
+# uncomment to use huggingface llms
+# huggingface-hub==0.14.1
+
+# uncomment to use instructor embeddings
+# InstructorEmbedding==1.0.1
+# sentence-transformers==2.2.2
