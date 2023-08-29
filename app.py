@@ -26,8 +26,10 @@ if st.button("Send"):
         # Pass the StreamlitCallbackHandler in the callbacks argument callbacks=[st_cb] is what makes it work!
         result = agent_executor.run(user_input, callbacks=[st_cb])
         st.write(result)
+        memory.load_memory_variables([])
 
 
 with st.sidebar:
     st_description = st.text_input("Enter description:")
     description = agent.CustomPromptTemplate.get_description(st_description)
+    print(memory.buffer)
