@@ -49,7 +49,7 @@ def Memory(user_context: str) -> str:
     """If the question is involving memory, you look to your memory banks for the answer."""
     return f"Results"
     
-tools = ["Memory"] 
+tools = [Memory] 
 
 #tools_string
     
