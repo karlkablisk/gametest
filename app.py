@@ -4,6 +4,7 @@ from langchain.callbacks import StreamlitCallbackHandler
 import agent 
 from agent import msgs
 from dotenv import load_dotenv
+import copy
 
 load_dotenv()
 
@@ -19,19 +20,23 @@ user_input = []
 st.title("Langchain Agent")
 user_input = st.text_input("Enter your query:")
 
-def update_session_and_history(memory):
-  st.session_state['conversation_memory'] = copy.deepcopy(memory.chat_memory) 
-  msgs.append(copy.deepcopy(memory.chat_memory))
-
 # Initialize StreamlitCallbackHandler
 st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 
 if st.button("Send"):
-    with st.container():  # Wrap agent output in a container
-        # Pass the StreamlitCallbackHandler in the callbacks argument callbacks=[st_cb] is what makes it work!
-        result = agent_executor.run(user_input, callbacks=[st_cb])
-        st.write(result)
-        agent.memory.load_memory_variables([])
+  with st.container(): 
+    result = agent_executor.run(user_input, callbacks=[st_cb])
+    
+    # Update session state and history
+    update_session_and_history(agent.memory)  
+    
+    st.write(result)
+
+# Function to update session and history  
+def update_session_and_history(memory):
+  st.session_state['conversation_memory'] = copy.deepcopy(memory.chat_memory)
+  msgs.append(copy.deepcopy(memory.chat_memory))
+        
 
 
 with st.sidebar:
