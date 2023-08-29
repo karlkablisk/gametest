@@ -150,7 +150,7 @@ class CustomPromptTemplate(StringPromptTemplate):
 
     def format(self, **kwargs) -> str:
         #chat_history = memory.get('history')  # Fetch the chat history
-        #kwargs["history"] = "\n".join(chat_history)
+        kwargs["history"] = "\n".join(chat_history)
         kwargs["name"] = self.name
         kwargs["traits"] = self.traits
         kwargs["likes"] = self.likes
