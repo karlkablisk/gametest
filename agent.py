@@ -13,6 +13,7 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.schema import Document, AgentAction, AgentFinish
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
+from langchain.chains import ConversationChain
 
 #other imports
 import re
@@ -149,6 +150,12 @@ prompt = CustomPromptTemplate(
     input_variables=["input", "intermediate_steps"]
 )
 
+conversation = ConversationChain(
+    prompt=prompt,
+    llm=llm,
+    verbose=True,
+    memory=memory
+)
 
 #TEMPLATE END
 
