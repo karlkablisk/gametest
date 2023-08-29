@@ -161,7 +161,6 @@ prompt = CustomPromptTemplate(
 )
 
 conversation = ConversationChain(
-    prompt=prompt,
     llm=llm,
     verbose=True,
     memory=memory
