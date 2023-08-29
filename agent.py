@@ -254,7 +254,7 @@ agent_executor = AgentExecutor.from_agent_and_tools(
     verbose=True,
     agent_kwargs = {
         "memory_prompts": [history],
-        "input_variables": ["input", "chat_history"]
+        "input_variables": ["input", "history"]
     }    
 )
 
