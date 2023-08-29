@@ -182,17 +182,19 @@ llm_chain = LLMChain(llm=llm, prompt=prompt, memory=memory)
 # Output Parser
 class CustomOutputParser(AgentOutputParser):
     def parse(self, llm_output: str) -> Union[AgentAction, AgentFinish]:
-        # Check if agent should finish
         if "Final Answer:" in llm_output:
             return AgentFinish(
                 return_values={"output": llm_output.split("Final Answer:")[-1].strip()},
                 log=llm_output,
             )
-        # Use a more robust regex pattern to match action and action input
+
         regex = r"Action\s*:\s*(.*?)\nAction\s*Input\s*:\s*(.*)"
         match = re.search(regex, llm_output, re.DOTALL)
+        
         if not match:
-            raise ValueError(f"Could not parse LLM output: `{llm_output}`")
+            return AgentAction(
+                tool="Unknown", tool_input="", log=f"Could not parse LLM output: `{llm_output}`"
+            )
         
         action = match.group(1).strip()
         action_input = match.group(2).strip(" ").strip('"')
