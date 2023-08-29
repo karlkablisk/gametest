@@ -59,8 +59,6 @@ homemodel = "meta/llama-2" #need to edit this
 
 llm = ChatOpenAI(model_name=main_model, temperature=0.2, streaming=True, callbacks=[StreamingStdOutCallbackHandler()])
 #llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True,temperature=0.2)
-llm_chain = LLMChain(llm=llm, prompt=prompt, memory=memory)
-
 
 #LLM END
 
@@ -170,6 +168,11 @@ conversation = ConversationChain(
 )
 
 #TEMPLATE END
+
+
+#LLM CHAIN
+llm_chain = LLMChain(llm=llm, prompt=prompt, memory=memory)
+
 
 # Output Parser
 class CustomOutputParser(AgentOutputParser):
