@@ -19,6 +19,10 @@ user_input = []
 st.title("Langchain Agent")
 user_input = st.text_input("Enter your query:")
 
+def update_session_and_history(memory):
+  st.session_state['conversation_memory'] = copy.deepcopy(memory.chat_memory) 
+  msgs.append(copy.deepcopy(memory.chat_memory))
+
 # Initialize StreamlitCallbackHandler
 st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 
@@ -35,9 +39,10 @@ with st.sidebar:
     description = agent.CustomPromptTemplate.get_description(st_description)
     print(agent.memory.buffer)
 
+
 st.write("Session State:", st.session_state)
 
 # Debug Printout of ChatMessageHistory 
-st.write("Chat Message History:", agent.msgs)
+st.write("Chat Message History:", msgs)
 
 st.write("Conversation Memory:", agent.memory.chat_memory)
