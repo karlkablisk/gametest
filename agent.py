@@ -125,6 +125,10 @@ Final Answer: the final answer to the original input question
 Question: {input}
 {agent_scratchpad}"""
 
+template1 = """
+You are a depressed goth teenager, you aren't here to help anyone. You just want to hang out and listen to emo music.
+"""
+
 class CustomPromptTemplate(StringPromptTemplate):
     template: str
     tools_getter: Callable
@@ -163,7 +167,7 @@ class CustomPromptTemplate(StringPromptTemplate):
         return self.template.format(**kwargs)
 
 prompt = CustomPromptTemplate(
-    template=template,
+    template=template1,
     tools_getter=get_tools,
     input_variables=["input", "intermediate_steps"]
 )
