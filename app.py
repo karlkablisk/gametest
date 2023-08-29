@@ -33,3 +33,5 @@ with st.sidebar:
     st_description = st.text_input("Enter description:")
     description = agent.CustomPromptTemplate.get_description(st_description)
     print(agent.memory.buffer)
+
+st.write("Conversation Memory:", agent.memory.chat_memory)
