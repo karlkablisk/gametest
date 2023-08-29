@@ -57,7 +57,7 @@ def Secret_number(user_context: str) -> str:
     """If you need to remember a secret number, agree and commit it to memory."""
     return f"Results"
     
-tools = [Secret_number] 
+tools = [] 
 
 #tools_string
     
