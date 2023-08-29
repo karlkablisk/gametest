@@ -110,6 +110,9 @@ You have access to the following tools:
 Use the following format when talking:
 For simple statements you can just reply back. Skip to final answer and give a solid reply.
 
+Refer to the chat history to make sure you are continuing the conversation smoothly and recalling what the user said.
+{history}
+
 Question: the input question you must answer
 Thought: you should always think about what to do
 Action: the action to take, only if it sounds like its related to a tool, should you use one of [{tool_names}]
@@ -167,7 +170,7 @@ class CustomPromptTemplate(StringPromptTemplate):
         return self.template.format(**kwargs)
 
 prompt = CustomPromptTemplate(
-    template=template1,
+    template=template,
     tools_getter=get_tools,
     input_variables=["input", "intermediate_steps"]
 )
