@@ -75,8 +75,8 @@ msgs = ChatMessageHistory(key="memory_key")
 embeddings = OpenAIEmbeddings()
 
 #memory start
-#memory = ConversationBufferMemory(memory_key="history", chat_memory=msgs, input_key="input", return_messages=True)
-memory = ConversationBufferMemory(memory_key="history", input_key="input", return_messages=True)
+#memory = ConversationBufferMemory(memory_key="memory_key", chat_memory=msgs, input_key="input", return_messages=True)
+memory = ConversationBufferMemory(memory_key="memory_key", input_key="input", return_messages=True)
 
 
 docs = [Document(page_content=t.description, metadata={"index": i}) for i, t in enumerate(ALL_TOOLS)]
@@ -92,7 +92,7 @@ def get_tools(query):
 
 
 #DATA STORAGE END
-history = MessagesPlaceholder(variable_name="history")
+memory_key = MessagesPlaceholder(variable_name="memory_key")
 
 # Custom Prompt Template
 template = """
@@ -112,7 +112,7 @@ Use the following format when talking:
 For simple statements you can just reply back. Skip to final answer and give a solid reply.
 
 Refer to the chat history to make sure you are continuing the conversation smoothly and recalling what the user said.
-{history}
+{memory_key}
 
 Question: the input question you must answer
 Thought: you should always think about what to do
