@@ -41,12 +41,12 @@ def discover_item(user_context: str) -> str:
     return f"Item Name: {item_name}, Description: {item_description}"
     
 @tool
-def about_you(user_context: str) -> str:
+def about_ai(user_context: str) -> str:
     """When the topic is about you the AI, you reflect on your own personality for the anwser."""
     return f"Results"
 
 @tool
-def Memory(user_context: str) -> str:
+def memory(user_context: str) -> str:
     """If the question is involving memory, you look to your memory banks for the answer.
     This means remember, recall, and seeing if you know any personal facts about the speaker 
     or things the speaker has done or said based on your interaction with them."""
@@ -54,7 +54,7 @@ def Memory(user_context: str) -> str:
 
 
     
-tools = [] 
+tools = [memory, about_ai] 
 
 #tools_string
     
