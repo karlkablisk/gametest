@@ -36,7 +36,7 @@ with st.sidebar:
 
 st.write("Session State:", st.session_state)
 
-# Debug Printout of ChatMessageHistory
-st.write("Chat Message History:", msgs)
+# Debug Printout of ChatMessageHistory 
+st.write("Chat Message History:", agent.msgs)
 
 st.write("Conversation Memory:", agent.memory.chat_memory)
