@@ -67,7 +67,7 @@ msgs = ChatMessageHistory(key="memory_key")
 embeddings = OpenAIEmbeddings()
 
 #memory start
-memory = ChatMessageHistory(", chat_memory=msgs, input_key="input", return_messages=True)
+memory = ConversationBufferMemory(", chat_memory=msgs, input_key="input", return_messages=True)
 
 
 docs = [Document(page_content=t.description, metadata={"index": i}) for i, t in enumerate(ALL_TOOLS)]
