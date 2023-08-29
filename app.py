@@ -24,7 +24,7 @@ st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 if st.button("Send"):
     with st.container():  # Wrap agent output in a container
         # Pass the StreamlitCallbackHandler in the callbacks argument callbacks=[st_cb] is what makes it work!
-        result = agent_executor.run(user_input, callbacks=[st_cb], conversation=conversation)
+        result = agent_executor.run(user_input, callbacks=[st_cb])
         st.write(result)
 
 
