@@ -41,7 +41,7 @@ def discover_item(user_context: str) -> str:
     return f"Item Name: {item_name}, Description: {item_description}"
     
 @tool
-def about_you(user_context: str) -> str:
+def about_ai(user_context: str) -> str:
     """When the topic is about you the AI, you reflect on your own personality for the anwser."""
     return f"Results"
 
@@ -52,7 +52,7 @@ def Memory(user_context: str) -> str:
     or things the speaker has done or said based on your interaction with them."""
     return f"Results"
     
-tools = [Memory] 
+tools = [Memory, about_ai] 
 
 #tools_string
     
@@ -118,7 +118,7 @@ Refer to the chat history to make sure you are continuing the conversation smoot
 
 Question: the input question you must answer
 Thought: you should always think about what to do
-Action: the action to take, only if it sounds like its related to a tool, should you use one of [{tool_names}]
+Action: the action to take, only if it sounds like its related to a tool, should you use one of 
 If you try to access a tool that doesnt exsist, its ok, it means there isn't a tool for the situation and you should just reply back normally.
 only do the discover_item action once, then make up a name, a description and go straight to the final answer.
 
