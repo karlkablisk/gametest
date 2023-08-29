@@ -2,6 +2,7 @@
 import streamlit as st
 from langchain.callbacks import StreamlitCallbackHandler
 import agent 
+from agent import msgs
 from dotenv import load_dotenv
 
 load_dotenv()
