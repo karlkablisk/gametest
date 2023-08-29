@@ -41,10 +41,15 @@ def discover_item(user_context: str) -> str:
     
 @tool
 def about_you(user_context: str) -> str:
-    """Determines what item is found based on user context."""
+    """When the topic is about you the AI, you reflect on your own personality for the anwser."""
+    return f"Results"
+
+@tool
+def Memory(user_context: str) -> str:
+    """If the question is involving memory, you look to your memory banks for the answer."""
     return f"Results"
     
-tools = [] 
+tools = ['Memory'] 
 
 #tools_string
     
