@@ -52,10 +52,7 @@ def Memory(user_context: str) -> str:
     or things the speaker has done or said based on your interaction with them."""
     return f"Results"
 
-@tool
-def Secret_number(user_context: str) -> str:
-    """If you need to remember a secret number, agree and commit it to memory."""
-    return f"Results"
+
     
 tools = [] 
 
