@@ -32,4 +32,4 @@ if st.button("Send"):
 with st.sidebar:
     st_description = st.text_input("Enter description:")
     description = agent.CustomPromptTemplate.get_description(st_description)
-    print(agebt.memory.buffer)
+    print(agent.memory.buffer)
