@@ -118,7 +118,7 @@ Refer to the chat history to make sure you are continuing the conversation smoot
 
 Question: the input question you must answer
 Thought: you should always think about what to do
-Action: the action to take, only if it sounds like its related to a tool, should you use one of 
+Action: the action to take, only if it sounds like its related to a tool, should you use one of your tools.
 If you try to access a tool that doesnt exsist, its ok, it means there isn't a tool for the situation and you should just reply back normally.
 only do the discover_item action once, then make up a name, a description and go straight to the final answer.
 
