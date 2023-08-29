@@ -47,10 +47,22 @@ def about_you(user_context: str) -> str:
 tools = [] 
 
 #tools_string
-
-
     
 #TOOLS END
+
+#LLM AND MODELS
+main_model = "gpt-3.5-turbo"
+strong_model = "gpt-4"
+gpt35_16 = "gpt-3.5-turbo-16k"
+gpt4_16 = "gpt-4-16k"
+homemodel = "meta/llama-2" #need to edit this
+
+llm = ChatOpenAI(model_name=main_model, temperature=0.2, streaming=True, callbacks=[StreamingStdOutCallbackHandler()])
+#llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True,temperature=0.2)
+llm_chain = LLMChain(llm=llm, prompt=prompt, memory=memory)
+
+
+#LLM END
 
 #DATA STORAGE
 msgs = ChatMessageHistory(key="memory_key")
@@ -187,16 +199,7 @@ output_parser = CustomOutputParser()
 
 # OUTPUT PARSER END
 
-#LLM AND MODELS
-main_model = "gpt-3.5-turbo"
-strong_model = "gpt-4"
-gpt35_16 = "gpt-3.5-turbo-16k"
-gpt4_16 = "gpt-4-16k"
-homemodel = "meta/llama-2" #need to edit this
 
-llm = ChatOpenAI(model_name=main_model, temperature=0.2, streaming=True, callbacks=[StreamingStdOutCallbackHandler()])
-#llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True,temperature=0.2)
-llm_chain = LLMChain(llm=llm, prompt=prompt, memory=memory)
 
 #AGENT AND EXECUTOR
 
