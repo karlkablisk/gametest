@@ -14,6 +14,7 @@ from langchain.schema import Document, AgentAction, AgentFinish
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
 from langchain.chains import ConversationChain
+from langchain.prompts import MessagesPlaceholder
 
 #other imports
 import re
@@ -91,7 +92,7 @@ def get_tools(query):
 
 
 #DATA STORAGE END
-
+history = MessagesPlaceholder(variable_name="history")
 
 # Custom Prompt Template
 template = """
