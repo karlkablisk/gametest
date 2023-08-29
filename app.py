@@ -7,13 +7,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 # Initialize the agent executor
 agent_executor = agent.get_agent_executor()
 
 user_input = []
-
-
 
 #STREAMLIT INTERFACE
 st.title("Langchain Agent")
@@ -28,14 +25,16 @@ if st.button("Send"):
         result = agent_executor.run(user_input, callbacks=[st_cb])
         st.write(result)
         agent.memory.load_memory_variables([])
-
+        
+        # Copying agent.memory.chat_memory to st.session_state
+        st.session_state['chat_memory'] = agent.memory.chat_memory  # Add this line
 
 with st.sidebar:
     st_description = st.text_input("Enter description:")
     description = agent.CustomPromptTemplate.get_description(st_description)
     print(agent.memory.buffer)
 
-st.write("Session State:", st.session_state)
+st.write("Session State:", st.session_state)  # This will now include 'chat_memory'
 
 # Debug Printout of ChatMessageHistory 
 st.write("Chat Message History:", msgs)
