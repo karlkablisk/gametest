@@ -112,7 +112,7 @@ Use the following format when talking:
 For simple statements you can just reply back. Skip to final answer and give a solid reply.
 
 Refer to the chat history to make sure you are continuing the conversation smoothly and recalling what the user said.
-
+[history]
 
 Question: the input question you must answer
 Thought: you should always think about what to do
@@ -245,7 +245,13 @@ agent = LLMSingleActionAgent(
 )
 
 agent_executor = AgentExecutor.from_agent_and_tools(
-    agent=agent, tools=tools, verbose=True
+    agent=agent, 
+    tools=tools, 
+    verbose=True,
+    agent_kwargs = {
+        "memory_prompts": [history],
+        "input_variables": ["input", "chat_history"]
+    }    
 )
 
 def get_agent_executor():
