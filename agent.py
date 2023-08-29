@@ -219,7 +219,7 @@ class SimplifiedOutputParser(AgentOutputParser):
             )
 
 
-output_parser = SimplifiedOutputParser()
+output_parser = CustomOutputParser()
 
 # OUTPUT PARSER END
 
