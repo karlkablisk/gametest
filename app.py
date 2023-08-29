@@ -32,7 +32,10 @@ if st.button("Send"):
         # Copy the chat memory to session_state and msgs
         st.session_state.chat_memory = agent.memory.chat_memory
         if agent.memory.chat_memory:  # Check if chat_memory is not empty
-            msgs.add_message(agent.memory.chat_memory[-1])
+            if agent.memory.chat_memory.messages:  # Check if messages are not empty
+                last_message = agent.memory.chat_memory.messages[-1]
+                msgs.add_message(last_message)
+
 
 with st.sidebar:
     st_description = st.text_input("Enter description:")
