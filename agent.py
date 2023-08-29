@@ -107,6 +107,8 @@ Your likes are {likes}
 You have access to the following tools:
 
 {tools}
+IF YOU GET INVALID TOOL
+stop using tools and try to answer using only your own memory and what you know.
 
 Use the following format when talking:
 For simple statements you can just reply back. Skip to final answer and give a solid reply.
