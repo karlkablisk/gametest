@@ -34,4 +34,9 @@ with st.sidebar:
     description = agent.CustomPromptTemplate.get_description(st_description)
     print(agent.memory.buffer)
 
+st.write("Session State:", st.session_state)
+
+# Debug Printout of ChatMessageHistory
+st.write("Chat Message History:", msgs)
+
 st.write("Conversation Memory:", agent.memory.chat_memory)
