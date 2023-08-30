@@ -40,14 +40,14 @@ st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 
 if st.button("Send"):
     try:
-        with st.container():  # Wrap agent output in a container
-            # Pass the StreamlitCallbackHandler in the callbacks argument callbacks=[st_cb] is what makes it work!
-            result = agent_executor.run(user_input, callbacks=[st_cb])
-                st.write(result)
-                agent.memory.load_memory_variables([])
-                st.session_state['chat_memory'] = agent.memory.chat_memory
-        except openai.error.APIError as e:
-            st.error(f"An error occurred: {e}")
+        with st.container():  
+            result = agent_executor.run(user_input, callbacks=[st_cb]) #callbacks is what makes the thining code
+            st.write(result)
+            agent.memory.load_memory_variables([])
+            st.session_state['chat_memory'] = agent.memory.chat_memory
+    except openai.error.APIError as e:
+        st.error(f"An error occurred: {e}")
+
         
 
 with st.sidebar:
