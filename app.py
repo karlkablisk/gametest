@@ -1,6 +1,8 @@
 # app.py
 import streamlit as st
 from langchain.callbacks import StreamlitCallbackHandler
+from langchain.memory import ConversationBufferMemory  # Make sure to import this
+
 import agent 
 from agent import msgs
 from dotenv import load_dotenv
