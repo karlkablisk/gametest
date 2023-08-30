@@ -38,15 +38,17 @@ user_input = st.text_input("Enter your query:")
 st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 
 
-if st.button("Send"):
+if prompt := st.chat_input(placeholder="Ask your question here"):
+    st.chat_message("user").write(prompt)
     try:
-        with st.container():  
-            result = agent_executor.run(user_input, callbacks=[st_cb]) #callbacks is what makes the thining code
-            st.write(result)
-            agent.memory.load_memory_variables([])
-            st.session_state['chat_memory'] = agent.memory.chat_memory
+        with st.chat_message("assistant"):
+            st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
+            response = executor(prompt, callbacks=[st_cb])
+            st.write(f"{name}: {response['output']}")
+            st.session_state.steps[str(len(msgs.messages) - 1)] = response["intermediate_steps"]
     except openai.error.APIError as e:
         st.error(f"An error occurred: {e}")
+
 
         
 
