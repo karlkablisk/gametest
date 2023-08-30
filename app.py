@@ -46,7 +46,6 @@ try:
             st.session_state['chat_memory'] = agent.memory.chat_memory  # Add this line
 except openai.error.APIError as e:
     print("openai failed to respond")
-    return None
 
 with st.sidebar:
     st_description = st.text_input("Enter description:")
