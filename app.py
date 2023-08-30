@@ -12,6 +12,9 @@ load_dotenv()
 if 'memory' not in st.session_state:
     st.session_state['memory'] = ConversationBufferMemory(memory_key="history", input_key="input", return_messages=True)
 
+if 'chat_memory' not in st.session_state:
+    st.session_state['chat_memory'] = []  # Initialize chat_memory in session state
+
 if 'conversation' not in st.session_state:
     st.session_state.conversation = agent.initialize_chain(st.session_state['memory'])
 
@@ -36,14 +39,16 @@ st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 
 
 if st.button("Send"):
-    with st.container():  # Wrap agent output in a container
-        # Pass the StreamlitCallbackHandler in the callbacks argument callbacks=[st_cb] is what makes it work!
-        result = agent_executor.run(user_input, callbacks=[st_cb])
-        st.write(result)
-        agent.memory.load_memory_variables([])
+    try:
+        with st.container():  # Wrap agent output in a container
+            # Pass the StreamlitCallbackHandler in the callbacks argument callbacks=[st_cb] is what makes it work!
+            result = agent_executor.run(user_input, callbacks=[st_cb])
+                st.write(result)
+                agent.memory.load_memory_variables([])
+                st.session_state['chat_memory'] = agent.memory.chat_memory
+        except openai.error.APIError as e:
+            st.error(f"An error occurred: {e}")
         
-        # Copying agent.memory.chat_memory to st.session_state
-        st.session_state['chat_memory'] = agent.memory.chat_memory  # Add this line
 
 with st.sidebar:
     st_description = st.text_input("Enter description:")
