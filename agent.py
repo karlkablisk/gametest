@@ -193,10 +193,11 @@ conversation = ConversationChain(
 )
 
 #TEMPLATE END
-
+agent_executor = None
 
 #LLM CHAIN agent and executor
 def initialize_chain(memory):
+    global agent_executor
     llm_chain = LLMChain(llm=llm, prompt=prompt, memory=memory)
 
     #AGENT AND EXECUTOR
@@ -220,6 +221,9 @@ def initialize_chain(memory):
         }    
     )
     return agent_executor
+
+
+
 
 # Output Parser
 class CustomOutputParser(AgentOutputParser):
@@ -264,6 +268,7 @@ output_parser = CustomOutputParser()
 # OUTPUT PARSER END
 
 
+initialize_global_agent_executor(memory)
 
 
 
