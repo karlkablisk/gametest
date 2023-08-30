@@ -1,18 +1,41 @@
-# app.py
 import streamlit as st
 from langchain.callbacks import StreamlitCallbackHandler
 import agent 
 from agent import msgs
 from dotenv import load_dotenv
+import pymysql
+import requests
 
 load_dotenv()
+
+# MySQL Configuration
+DB_HOST = 'mysql.kabliskkeep.com'
+DB_USER = 'Karlkablisk'
+DB_PASS = os.environ.get('DB_PASS')
+DB_NAME = 'karlaidb'
+TABLE_NAME = 'aidiscord_'
+
+
+# Webhook Configuration
+WEBHOOK_URL = os.environ.get('webhook_url')
 
 # Initialize the agent executor
 agent_executor = agent.get_agent_executor()
 
-user_input = []
+def fetch_messages():
+    conn = pymysql.connect(host=DB_HOST, user=DB_USER, password=DB_PASS, database=DB_NAME)
+    cursor = conn.cursor()
+    sql = f"SELECT username, message FROM {TABLE_NAME}"
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
 
-#STREAMLIT INTERFACE
+def send_to_discord(message):
+    payload = {'content': message}
+    requests.post(WEBHOOK_URL, json=payload)
+
+# Streamlit UI
 st.title("Langchain Agent")
 user_input = st.text_input("Enter your query:")
 
@@ -20,23 +43,25 @@ user_input = st.text_input("Enter your query:")
 st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 
 if st.button("Send"):
-    with st.container():  # Wrap agent output in a container
-        # Pass the StreamlitCallbackHandler in the callbacks argument callbacks=[st_cb] is what makes it work!
+    with st.container():
         result = agent_executor.run(user_input, callbacks=[st_cb])
         st.write(result)
         agent.memory.load_memory_variables([])
-        
-        # Copying agent.memory.chat_memory to st.session_state
-        st.session_state['chat_memory'] = agent.memory.chat_memory  # Add this line
+        send_to_discord(result)  # Sending to Discord
 
+        # Copy agent.memory.chat_memory to st.session_state
+        st.session_state['chat_memory'] = agent.memory.chat_memory
+
+# Sidebar
 with st.sidebar:
     st_description = st.text_input("Enter description:")
     description = agent.CustomPromptTemplate.get_description(st_description)
-    print(agent.memory.buffer)
 
-st.write("Session State:", st.session_state)  # This will now include 'chat_memory'
-
-# Debug Printout of ChatMessageHistory 
+# Debug printouts
+st.write("Session State:", st.session_state)
 st.write("Chat Message History:", msgs)
-
 st.write("Conversation Memory:", agent.memory.chat_memory)
+
+# Output Database Messages
+database_msgs = fetch_messages()
+st.write("Database Message History:", database_msgs)
