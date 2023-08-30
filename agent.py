@@ -117,7 +117,7 @@ Your likes are {likes}
 
 Use the following format when talking:
 For simple statements you can just reply back. Skip to final answer and give a solid reply.
-{history}
+
 Refer to the chat history to make sure you are continuing the conversation smoothly and recalling what the user said.
 
 Question: the input question you must answer
