@@ -4,6 +4,7 @@ from langchain.callbacks import StreamlitCallbackHandler
 from langchain.memory import ConversationBufferMemory  # Make sure to import this
 import agent 
 from agent import msgs, initialize_chain
+import openai
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -33,15 +34,19 @@ user_input = st.text_input("Enter your query:")
 # Initialize StreamlitCallbackHandler
 st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 
-if st.button("Send"):
-    with st.container():  # Wrap agent output in a container
-        # Pass the StreamlitCallbackHandler in the callbacks argument callbacks=[st_cb] is what makes it work!
-        result = agent_executor.run(user_input, callbacks=[st_cb])
-        st.write(result)
-        agent.memory.load_memory_variables([])
-        
-        # Copying agent.memory.chat_memory to st.session_state
-        st.session_state['chat_memory'] = agent.memory.chat_memory  # Add this line
+try:
+    if st.button("Send"):
+        with st.container():  # Wrap agent output in a container
+            # Pass the StreamlitCallbackHandler in the callbacks argument callbacks=[st_cb] is what makes it work!
+            result = agent_executor.run(user_input, callbacks=[st_cb])
+            st.write(result)
+            agent.memory.load_memory_variables([])
+            
+            # Copying agent.memory.chat_memory to st.session_state
+            st.session_state['chat_memory'] = agent.memory.chat_memory  # Add this line
+except openai.error.APIError as e:
+    print("openai failed to respond")
+    return None
 
 with st.sidebar:
     st_description = st.text_input("Enter description:")
