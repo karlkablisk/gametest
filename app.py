@@ -22,7 +22,7 @@ agent_executor = agent.initialize_chain(st.session_state['memory'])
 
 
 # Initialize the agent executor
-agent_executor = agent.get_agent_executor()
+#agent_executor = agent.get_agent_executor()
 
 user_input = []
 
