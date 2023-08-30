@@ -188,7 +188,7 @@ prompt = CustomPromptTemplate(
 conversation = ConversationChain(
     llm=llm,
     verbose=True,
-    memory=st.session_state['memory']
+    memory=memory
 )
 
 #TEMPLATE END
@@ -266,8 +266,8 @@ output_parser = CustomOutputParser()
 
 
 
-def get_agent_executor():
-    return agent_executor
+#def get_agent_executor():
+#    return agent_executor
     
 #AGENT END
 
