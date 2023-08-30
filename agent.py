@@ -53,7 +53,7 @@ def Memory(user_context: str) -> str:
     or things the speaker has done or said based on your interaction with them."""
     return f"Results"
     
-tools = [Google_Search] + [discover_item]
+tools = [Search] + [discover_item]
 
 #tools_string
     
@@ -117,7 +117,7 @@ Your likes are {likes}
 
 Use the following format when talking:
 For simple statements you can just reply back. Skip to final answer and give a solid reply.
-{history}
+{chat_history}
 Refer to the chat history to make sure you are continuing the conversation smoothly and recalling what the user said.
 
 Question: the input question you must answer

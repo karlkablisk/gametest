@@ -18,7 +18,7 @@ class SerpAPIWrapper:
 # Create Search tool and automatically add it to ALL_TOOLS
 search = SerpAPIWrapper()
 Tool(
-    name="Google_Search",
+    name="Search",
     func=search.run,
     description="Useful for when you don't know the answer and need to find more information online.",
 )
