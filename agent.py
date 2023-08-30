@@ -7,6 +7,7 @@ from langchain import OpenAI, SerpAPIWrapper, LLMChain
 from langchain.tools import tool
 from langchain.agents import Tool, AgentExecutor, LLMSingleActionAgent, AgentOutputParser
 from langchain.prompts import StringPromptTemplate
+from langchain.prompts.prompt import PromptTemplate
 from langchain.chat_models import ChatOpenAI
 from langchain.vectorstores import FAISS
 from langchain.embeddings import OpenAIEmbeddings
@@ -267,7 +268,7 @@ output_parser = CustomOutputParser()
 
 
 #def get_agent_executor():
-#    return agent_executor
+#   return agent_executor
     
 #AGENT END
 

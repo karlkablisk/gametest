@@ -2,22 +2,25 @@
 import streamlit as st
 from langchain.callbacks import StreamlitCallbackHandler
 from langchain.memory import ConversationBufferMemory  # Make sure to import this
-
 import agent 
-from agent import msgs
-from dotenv import load_dotenv
+from agent import msgs, initialize_chain, agent_executor
 
+from dotenv import load_dotenv
 load_dotenv()
 
 if 'memory' not in st.session_state:
     st.session_state['memory'] = ConversationBufferMemory(memory_key="history", input_key="input", return_messages=True)
+
+if 'conversation' not in st.session_state:
+    st.session_state.conversation = agent.initialize_chain(st.session_state['memory'])
+
 
 # Initialize the agent executor using the memory from session state
 agent_executor = agent.initialize_chain(st.session_state['memory'])
 
 
 # Initialize the agent executor
-agent_executor = agent.agent_executor()
+agent_executor = agent.get_agent_executor()
 
 user_input = []
 
