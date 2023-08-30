@@ -8,7 +8,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 if 'memory' not in st.session_state:
-    st.session_state['memory'] = agent.get_memory()
+    st.session_state['memory'] = ConversationBufferMemory(memory_key="history", input_key="input", return_messages=True)
+
+# Initialize the agent executor using the memory from session state
+agent_executor = agent.initialize_chain(st.session_state['memory'])
+
 
 # Initialize the agent executor
 agent_executor = agent.get_agent_executor()

@@ -194,9 +194,31 @@ conversation = ConversationChain(
 #TEMPLATE END
 
 
-#LLM CHAIN
-llm_chain = LLMChain(llm=llm, prompt=prompt, memory=memory)
+#LLM CHAIN agent and executor
+def initialize_chain(memory):
+    llm_chain = LLMChain(llm=llm, prompt=prompt, memory=memory)
 
+    #AGENT AND EXECUTOR
+
+    agent = LLMSingleActionAgent(
+        llm_chain=llm_chain,
+        output_parser=output_parser,
+        stop=["\nObservation:"],
+        allowed_tools=tool_names,
+        handle_parsing_errors=True,
+        verbose=True,
+    )
+
+    agent_executor = AgentExecutor.from_agent_and_tools(
+        agent=agent, 
+        tools=tools, 
+        verbose=True,
+        agent_kwargs = {
+            "memory_prompts": [history],
+            "input_variables": ["input", "chat_history"]
+        }    
+    )
+    return agent_executor
 
 # Output Parser
 class CustomOutputParser(AgentOutputParser):
@@ -242,26 +264,7 @@ output_parser = CustomOutputParser()
 
 
 
-#AGENT AND EXECUTOR
 
-agent = LLMSingleActionAgent(
-    llm_chain=llm_chain,
-    output_parser=output_parser,
-    stop=["\nObservation:"],
-    allowed_tools=tool_names,
-    handle_parsing_errors=True,
-    verbose=True,
-)
-
-agent_executor = AgentExecutor.from_agent_and_tools(
-    agent=agent, 
-    tools=tools, 
-    verbose=True,
-    agent_kwargs = {
-        "memory_prompts": [history],
-        "input_variables": ["input", "chat_history"]
-    }    
-)
 
 def get_agent_executor():
     return agent_executor
