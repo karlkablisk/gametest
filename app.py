@@ -32,13 +32,15 @@ user_input = []
 
 #STREAMLIT INTERFACE
 st.title("Langchain Agent")
-user_input = st.text_input("Enter your query:")
+#user_input = st.text_input("Enter your query:")
 
 # Initialize StreamlitCallbackHandler
 st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 
 
-if prompt := st.chat_input(placeholder="Ask your question here"):
+user_input = st.chat_input(placeholder="Who won the Women's U.S. Open in 2018?")
+if user_input:
+
     try:
         with st.container():  
             result = agent_executor.run(user_input, callbacks=[st_cb]) #callbacks is what makes the thining code
