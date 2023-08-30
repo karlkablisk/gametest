@@ -15,7 +15,7 @@ if 'conversation' not in st.session_state:
     st.session_state.conversation = agent.initialize_chain(st.session_state['memory'])
 
 # Initialize the agent executor using the memory from session state
-initialize_global_agent_executor(st.session_state['memory'])
+initialize_chain(st.session_state['memory'])
 
 # Initialize the agent executor using the memory from session state
 agent_executor = agent.initialize_chain(st.session_state['memory'])
