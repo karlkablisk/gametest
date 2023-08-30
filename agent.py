@@ -53,7 +53,7 @@ def Memory(user_context: str) -> str:
     or things the speaker has done or said based on your interaction with them."""
     return f"Results"
     
-tools = ["Search"] + [discover_item]
+tools = ['Search'] + ['discover_item']
 
 #tools_string
     
