@@ -7,6 +7,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+if 'memory' not in st.session_state:
+    st.session_state['memory'] = agent.get_memory()
+
 # Initialize the agent executor
 agent_executor = agent.get_agent_executor()
 

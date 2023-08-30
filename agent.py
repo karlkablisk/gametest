@@ -74,7 +74,14 @@ llm = ChatOpenAI(model_name=main_model, temperature=0.2, streaming=True, callbac
 msgs = ChatMessageHistory(key="history")
 embeddings = OpenAIEmbeddings()
 
-#memory start
+# Memory start
+
+#Initialize ConversationBufferMemory
+def get_memory():
+    return ConversationBufferMemory(memory_key="history", input_key="input", return_messages=True)
+
+
+
 #memory = ConversationBufferMemory(memory_key="history", chat_memory=msgs, input_key="input", return_messages=True)
 memory = ConversationBufferMemory(memory_key="history", input_key="input", return_messages=True)
 
@@ -181,7 +188,7 @@ prompt = CustomPromptTemplate(
 conversation = ConversationChain(
     llm=llm,
     verbose=True,
-    memory=memory
+    memory=st.session_state['memory']
 )
 
 #TEMPLATE END
