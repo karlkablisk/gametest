@@ -266,8 +266,8 @@ output_parser = CustomOutputParser()
 
 
 
-def get_agent_executor():
-    return agent_executor
+#def get_agent_executor():
+#    return agent_executor
     
 #AGENT END
 
