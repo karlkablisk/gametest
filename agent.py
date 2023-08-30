@@ -268,7 +268,7 @@ output_parser = CustomOutputParser()
 # OUTPUT PARSER END
 
 
-initialize_global_agent_executor(memory)
+initialize_chain(memory)
 
 
 
