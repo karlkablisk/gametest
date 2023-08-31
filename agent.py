@@ -54,10 +54,9 @@ def Memory(user_context: str) -> str:
     or things the speaker has done or said based on your interaction with them."""
     return f"Results"
 
-tools_from_llm_math = load_tools(["llm-math"], llm=chat_model)
-search_tool = load_tools(["serpapi"], llm=chat_model)
 
-tools = tools_from_llm_math + search_tool
+
+tools = []
 
 
 #tools_string
