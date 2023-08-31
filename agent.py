@@ -208,6 +208,7 @@ def initialize_chain(memory):
         allowed_tools=tool_names,
         handle_parsing_errors=True,
         verbose=True,
+        max_iterations=1,
     )
 
     agent_executor = AgentExecutor.from_agent_and_tools(
