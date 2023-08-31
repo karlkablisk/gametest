@@ -24,6 +24,7 @@ from dotenv import load_dotenv
 import random
 from typing import Tuple, Optional
 import streamlit as st
+import math
 
 load_dotenv()
 
@@ -52,8 +53,12 @@ def Memory(user_context: str) -> str:
     This means remember, recall, and seeing if you know any personal facts about the speaker 
     or things the speaker has done or said based on your interaction with them."""
     return f"Results"
-    
-tools = []
+
+tools_from_llm_math = load_tools(["llm-math"], llm=chat_model)
+search_tool = load_tools(["serpapi"], llm=chat_model)
+
+tools = tools_from_llm_math + search_tool
+
 
 #tools_string
     
