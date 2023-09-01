@@ -15,6 +15,7 @@ ffmpeg
 
 # Miscellaneous 
 tiktoken
+requests
 
 # Tools
 google-search-results
