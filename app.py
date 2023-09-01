@@ -49,8 +49,6 @@ if user_input:
             st.session_state['chat_memory'] = agent.memory.chat_memory
     except openai.error.APIError as e:
         st.error(f"An error occurred: {e}")
-
-
         
 
 with st.sidebar:
@@ -61,6 +59,9 @@ with st.sidebar:
 #st.write("Session State:", st.session_state)  # This will now include 'chat_memory'
 
 # Debug Printout of ChatMessageHistory 
+st.write("Loaded Tools:", print(tools_string))
+#print(tools_string)
 #st.write("Chat Message History:", msgs)
+
 
 #st.write("Conversation Memory:", agent.memory.chat_memory)
