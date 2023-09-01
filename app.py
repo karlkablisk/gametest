@@ -12,7 +12,7 @@ load_dotenv()
 WEBHOOK_URL = st.secrets["WEBHOOK_URL"]
 
 # URL for the Flask app
-FLASK_URL = 'http://localhost:5000/messages'  # Replace with your Flask app URL
+FLASK_URL = 'https://Karldiscordbottodb.karlkablisk.repl.co/messages'  # Replace with your Flask app URL
 
 # Initialize the agent executor
 agent_executor = agent.get_agent_executor()
