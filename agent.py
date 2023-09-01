@@ -1,6 +1,7 @@
 #file imports
 import toollist
-from toollist import ALL_TOOLS, tools_string, tool_names
+from toollist import ALL_TOOLS, tools_string, tool_names, get_all_tools
+
 
 #Langchain imports
 from langchain import OpenAI, SerpAPIWrapper, LLMChain
@@ -56,8 +57,8 @@ def Memory(user_context: str) -> str:
 
 ## ! TOOLS HERE !! ##
 
-tools = []
-
+#tools = []
+tools = get_all_tools()
 
 #tools_string
     
