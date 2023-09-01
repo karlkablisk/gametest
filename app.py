@@ -29,7 +29,7 @@ def send_to_discord(message):
     requests.post(WEBHOOK_URL, json=payload)
 
 # Streamlit UI
-st.title("Langchain Agent")
+st.title("Breeze-chan Chat")
 user_input = st.text_input("Enter your query:")
 
 # Initialize StreamlitCallbackHandler
@@ -47,7 +47,7 @@ if st.button("Send"):
 with st.sidebar:
     st_description = st.text_input("log:")
     database_msgs = fetch_messages()
-    st.write("Message History:", database_msgs)
+    #st.write("Message History:", database_msgs)
 
     if st.button("Debug Test"):
         payload = {'content': 'Debug message from Streamlit'}
@@ -61,9 +61,9 @@ with st.sidebar:
             st.write("Invalid JSON response from server")
 
 # Debug printouts
-st.write("Session State:", st.session_state)
-st.write("Chat Message History:", msgs)
-st.write("Conversation Memory:", agent.memory.chat_memory)
+#st.write("Session State:", st.session_state)
+#st.write("Chat Message History:", msgs)
+#st.write("Conversation Memory:", agent.memory.chat_memory)
 
 # Output Messages
 database_msgs = fetch_messages()
