@@ -1,41 +1,35 @@
 import streamlit as st
 from langchain.callbacks import StreamlitCallbackHandler
-import agent 
+import agent
 from agent import msgs
 from dotenv import load_dotenv
-import pymysql
 import requests
 import time
 
-
 load_dotenv()
-
-# MySQL Configuration
-DB_HOST = 'mysql.kabliskkeep.com'
-DB_USER = 'karlkablisk3'
-DB_PASS = st.secrets["DB_PASS"]
-DB_NAME = 'karlaidb'
-TABLE_NAME = 'aidiscord_'
 
 # Webhook Configuration
 WEBHOOK_URL = st.secrets["WEBHOOK_URL"]
 
+# URL for the Flask app
+FLASK_URL = 'http://localhost:5000/messages'  # Replace with your Flask app URL
 
 # Initialize the agent executor
 agent_executor = agent.get_agent_executor()
 
+
 def fetch_messages():
-    conn = pymysql.connect(host=DB_HOST, user=DB_USER, password=DB_PASS, database=DB_NAME)
-    cursor = conn.cursor()
-    sql = f"SELECT username, message FROM {TABLE_NAME}"
-    cursor.execute(sql)
-    rows = cursor.fetchall()
-    conn.close()
-    return rows
+    response = requests.get(FLASK_URL)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return []
+
 
 def send_to_discord(message):
     payload = {'content': message}
     requests.post(WEBHOOK_URL, json=payload)
+
 
 # Streamlit UI
 st.title("Langchain Agent")
@@ -50,7 +44,6 @@ if st.button("Send"):
         st.write(result)
         agent.memory.load_memory_variables([])
         send_to_discord(result)  # Sending to Discord
-
         # Copy agent.memory.chat_memory to st.session_state
         st.session_state['chat_memory'] = agent.memory.chat_memory
 
@@ -60,15 +53,14 @@ with st.sidebar:
     database_placeholder = st.empty()
     while True:
         database_msgs = fetch_messages()
-        database_placeholder.write("Database Message History:", database_msgs)
+        database_placeholder.write("Message History:", database_msgs)
         time.sleep(1)  # Refresh every 1 second
-
 
 # Debug printouts
 st.write("Session State:", st.session_state)
 st.write("Chat Message History:", msgs)
 st.write("Conversation Memory:", agent.memory.chat_memory)
 
-# Output Database Messages
+# Output Messages
 database_msgs = fetch_messages()
-st.write("Database Message History:", database_msgs)
+st.write("Message History:", database_msgs)
