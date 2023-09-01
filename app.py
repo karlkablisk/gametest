@@ -25,18 +25,13 @@ WEBHOOK_URL = st.secrets["WEBHOOK_URL"]
 agent_executor = agent.get_agent_executor()
 
 def fetch_messages():
-    try:
-        conn = pymysql.connect(host=DB_HOST, user=DB_USER, password=DB_PASS, database=DB_NAME)
-        cursor = conn.cursor()
-        sql = f"SELECT username, message FROM {TABLE_NAME}"
-        cursor.execute(sql)
-        rows = cursor.fetchall()
-        conn.close()
-        return rows
-    except pymysql.MySQLError as e:
-        print(f"Error {e.args[0]}: {e.args[1]}")
-        return None
-
+    conn = pymysql.connect(host=DB_HOST, user=DB_USER, password=DB_PASS, database=DB_NAME)
+    cursor = conn.cursor()
+    sql = f"SELECT username, message FROM {TABLE_NAME}"
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
 
 def send_to_discord(message):
     payload = {'content': message}
