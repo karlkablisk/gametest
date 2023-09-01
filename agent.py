@@ -56,7 +56,7 @@ def Memory(user_context: str) -> str:
 
 
 
-tools = []
+tools = tools_string()
 
 
 #tools_string
