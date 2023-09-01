@@ -16,7 +16,7 @@ DB_NAME = 'karlaidb'
 TABLE_NAME = 'aidiscord_'
 
 # Webhook Configuration
-WEBHOOK_URL = st.secrets["webhook_url"]
+WEBHOOK_URL = st.secrets["WEBHOOK_URL"]
 
 
 # Initialize the agent executor
