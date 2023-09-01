@@ -50,11 +50,9 @@ if st.button("Send"):
 # Sidebar
 with st.sidebar:
     st_description = st.text_input("log:")
-    database_placeholder = st.empty()
-    while True:
-        database_msgs = fetch_messages()
-        database_placeholder.write("Message History:", database_msgs)
-        time.sleep(1)  # Refresh every 1 second
+    database_msgs = fetch_messages()
+    st.write("Message History:", database_msgs)  # This replaces `database_placeholder.write`
+
 
 # Debug printouts
 st.write("Session State:", st.session_state)
