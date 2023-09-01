@@ -67,7 +67,7 @@ with st.sidebar:
 
 # Output Messages
 database_msgs = fetch_messages()
-st.write("Message History:", database_msgs)
+#st.write("Message History:", database_msgs)
 
 # Trigger Streamlit with Discord message
 def trigger_streamlit_with_discord_message(message):
