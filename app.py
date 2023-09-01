@@ -11,13 +11,13 @@ load_dotenv()
 # MySQL Configuration
 DB_HOST = 'mysql.kabliskkeep.com'
 DB_USER = 'Karlkablisk'
-DB_PASS = os.environ.get('DB_PASS')
+DB_PASS = st.secrets["DB_PASS"]
 DB_NAME = 'karlaidb'
 TABLE_NAME = 'aidiscord_'
 
-
 # Webhook Configuration
-WEBHOOK_URL = os.environ.get('webhook_url')
+WEBHOOK_URL = st.secrets["webhook_url"]
+
 
 # Initialize the agent executor
 agent_executor = agent.get_agent_executor()
