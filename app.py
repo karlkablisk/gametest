@@ -41,19 +41,24 @@ if st.button("Send"):
         st.write(result)
         agent.memory.load_memory_variables([])
         send_to_discord(result)  # Sending to Discord
-        # Copy agent.memory.chat_memory to st.session_state
         st.session_state['chat_memory'] = agent.memory.chat_memory
 
 # Sidebar
 with st.sidebar:
     st_description = st.text_input("log:")
     database_msgs = fetch_messages()
-    st.write("Message History:", database_msgs)  # This replaces `database_placeholder.write`
+    st.write("Message History:", database_msgs)
 
     if st.button("Debug Test"):
         payload = {'content': 'Debug message from Streamlit'}
         response = requests.post(FLASK_URL, json=payload)
         st.write(f"Debug Test Response: {response.status_code}")
+        try:
+            response_data = response.json()
+            received_message = response_data.get('message', 'No message received')
+            st.write("Received message:", received_message)
+        except ValueError:
+            st.write("Invalid JSON response from server")
 
 # Debug printouts
 st.write("Session State:", st.session_state)
@@ -70,7 +75,7 @@ def trigger_streamlit_with_discord_message(message):
         result = agent_executor.run(message, callbacks=[st_cb])
         st.write(result)
         agent.memory.load_memory_variables([])
-        send_to_discord(result)  # Sending to Discord
+        send_to_discord(result)
         st.session_state['chat_memory'] = agent.memory.chat_memory
 
 # Test trigger from Discord
