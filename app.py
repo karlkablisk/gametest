@@ -17,20 +17,6 @@ FLASK_URL = 'http://Karldiscordbottodb.karlkablisk.repl.co/messages'  # Replace 
 # Initialize the agent executor
 agent_executor = agent.get_agent_executor()
 
-
-def fetch_messages():
-    response = requests.get(FLASK_URL)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return []
-
-
-def send_to_discord(message):
-    payload = {'content': message}
-    requests.post(WEBHOOK_URL, json=payload)
-
-
 # Streamlit UI
 st.title("Langchain Agent")
 user_input = st.text_input("Enter your query:")
@@ -53,16 +39,11 @@ with st.sidebar:
     database_msgs = fetch_messages()
     st.write("Message History:", database_msgs)  # This replaces `database_placeholder.write`
 
-    # Existing Streamlit code above...
-
     # New debug button
     if st.button("Debug Test"):
         payload = {'content': 'Debug message from Streamlit'}
         response = requests.post(FLASK_URL, json=payload)
         st.write(f"Debug Test Response: {response.status_code}")
-
-# Existing Streamlit code continues...
-
 
 
 # Debug printouts
@@ -73,3 +54,30 @@ st.write("Conversation Memory:", agent.memory.chat_memory)
 # Output Messages
 database_msgs = fetch_messages()
 st.write("Message History:", database_msgs)
+
+
+def fetch_messages():
+    response = requests.get(FLASK_URL)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return []
+
+def send_to_discord(message):
+    payload = {'content': message}
+    requests.post(WEBHOOK_URL, json=payload)
+
+def periodic_fetch():
+    while True:
+        new_msgs = fetch_messages()
+        if new_msgs:  # Check if there are new messages
+            for msg in new_msgs:
+                user_input = msg['message']
+                result = agent_executor.run(user_input, callbacks=[st_cb])
+                send_to_discord(result)
+            time.sleep(2)  # Sleep for 2 seconds before fetching again
+        else:
+            time.sleep(2)
+
+if __name__ == '__main__':
+    periodic_fetch()
