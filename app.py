@@ -12,7 +12,7 @@ load_dotenv()
 
 # MySQL Configuration
 DB_HOST = 'mysql.kabliskkeep.com'
-DB_USER = 'Karlkablisk3'
+DB_USER = 'kabliskadmin'
 DB_PASS = st.secrets["DB_PASS"]
 DB_NAME = 'karlaidb'
 TABLE_NAME = 'aidiscord_'
