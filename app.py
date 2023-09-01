@@ -5,6 +5,8 @@ from agent import msgs
 from dotenv import load_dotenv
 import pymysql
 import requests
+import time
+
 
 load_dotenv()
 
@@ -54,8 +56,13 @@ if st.button("Send"):
 
 # Sidebar
 with st.sidebar:
-    st_description = st.text_input("Enter description:")
-    description = agent.CustomPromptTemplate.get_description(st_description)
+    st_description = st.text_input("log:")
+    database_placeholder = st.empty()
+    while True:
+        database_msgs = fetch_messages()
+        database_placeholder.write("Database Message History:", database_msgs)
+        time.sleep(1)  # Refresh every 1 second
+
 
 # Debug printouts
 st.write("Session State:", st.session_state)
