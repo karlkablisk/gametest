@@ -18,6 +18,7 @@ from langchain.prompts import MessagesPlaceholder
 
 #other imports
 import re
+import os
 from typing import List, Union, Callable
 from dotenv import load_dotenv
 import random
