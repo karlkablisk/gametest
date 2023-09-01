@@ -59,7 +59,7 @@ with st.sidebar:
 #st.write("Session State:", st.session_state)  # This will now include 'chat_memory'
 
 # Debug Printout of ChatMessageHistory 
-st.write("Loaded Tools:", print(tools_string))
+st.write("Loaded Tools:", tools_string())
 #print(tools_string)
 #st.write("Chat Message History:", msgs)
 
