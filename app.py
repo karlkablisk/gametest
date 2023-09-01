@@ -79,6 +79,6 @@ def trigger_streamlit_with_discord_message(message):
         st.session_state['chat_memory'] = agent.memory.chat_memory
 
 # Test trigger from Discord
-if st.button("Test Streamlit Trigger from Discord"):
-    test_message = "Test message from Discord"
-    trigger_streamlit_with_discord_message(test_message)
+#if st.button("Test Streamlit Trigger from Discord"):
+#    test_message = "Test message from Discord"
+   # trigger_streamlit_with_discord_message(test_message)
