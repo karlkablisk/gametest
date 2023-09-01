@@ -8,13 +8,6 @@ import time
 
 load_dotenv()
 
-def fetch_messages():
-    response = requests.get(FLASK_URL)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return []
-
 # Webhook Configuration
 WEBHOOK_URL = st.secrets["WEBHOOK_URL"]
 
@@ -23,6 +16,17 @@ FLASK_URL = 'http://Karldiscordbottodb.karlkablisk.repl.co/messages'  # Replace 
 
 # Initialize the agent executor
 agent_executor = agent.get_agent_executor()
+
+def fetch_messages():
+    response = requests.get(FLASK_URL)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return []
+
+def send_to_discord(message):
+    payload = {'content': message}
+    requests.post(WEBHOOK_URL, json=payload)
 
 # Streamlit UI
 st.title("Langchain Agent")
@@ -46,12 +50,10 @@ with st.sidebar:
     database_msgs = fetch_messages()
     st.write("Message History:", database_msgs)  # This replaces `database_placeholder.write`
 
-    # New debug button
     if st.button("Debug Test"):
         payload = {'content': 'Debug message from Streamlit'}
         response = requests.post(FLASK_URL, json=payload)
         st.write(f"Debug Test Response: {response.status_code}")
-
 
 # Debug printouts
 st.write("Session State:", st.session_state)
@@ -62,24 +64,16 @@ st.write("Conversation Memory:", agent.memory.chat_memory)
 database_msgs = fetch_messages()
 st.write("Message History:", database_msgs)
 
+# Trigger Streamlit with Discord message
+def trigger_streamlit_with_discord_message(message):
+    with st.container():
+        result = agent_executor.run(message, callbacks=[st_cb])
+        st.write(result)
+        agent.memory.load_memory_variables([])
+        send_to_discord(result)  # Sending to Discord
+        st.session_state['chat_memory'] = agent.memory.chat_memory
 
-
-
-def send_to_discord(message):
-    payload = {'content': message}
-    requests.post(WEBHOOK_URL, json=payload)
-
-def periodic_fetch():
-    while True:
-        new_msgs = fetch_messages()
-        if new_msgs:  # Check if there are new messages
-            for msg in new_msgs:
-                user_input = msg['message']
-                result = agent_executor.run(user_input, callbacks=[st_cb])
-                send_to_discord(result)
-            time.sleep(2)  # Sleep for 2 seconds before fetching again
-        else:
-            time.sleep(2)
-
-if __name__ == '__main__':
-    periodic_fetch()
+# Test trigger from Discord
+if st.button("Test Streamlit Trigger from Discord"):
+    test_message = "Test message from Discord"
+    trigger_streamlit_with_discord_message(test_message)
