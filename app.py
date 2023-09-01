@@ -8,6 +8,13 @@ import time
 
 load_dotenv()
 
+def fetch_messages():
+    response = requests.get(FLASK_URL)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return []
+
 # Webhook Configuration
 WEBHOOK_URL = st.secrets["WEBHOOK_URL"]
 
@@ -56,12 +63,7 @@ database_msgs = fetch_messages()
 st.write("Message History:", database_msgs)
 
 
-def fetch_messages():
-    response = requests.get(FLASK_URL)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return []
+
 
 def send_to_discord(message):
     payload = {'content': message}
