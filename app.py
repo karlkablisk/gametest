@@ -53,6 +53,17 @@ with st.sidebar:
     database_msgs = fetch_messages()
     st.write("Message History:", database_msgs)  # This replaces `database_placeholder.write`
 
+    # Existing Streamlit code above...
+
+    # New debug button
+    if st.button("Debug Test"):
+        payload = {'content': 'Debug message from Streamlit'}
+        response = requests.post(FLASK_URL, json=payload)
+        st.write(f"Debug Test Response: {response.status_code}")
+
+# Existing Streamlit code continues...
+
+
 
 # Debug printouts
 st.write("Session State:", st.session_state)
