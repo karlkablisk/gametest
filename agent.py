@@ -15,9 +15,10 @@ from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
 from langchain.chains import ConversationChain
 from langchain.prompts import MessagesPlaceholder
-from langchain.callbacks.streaming_stdout_final_only import (
-    FinalStreamingStdOutCallbackHandler,
-)
+from langchain.callbacks.streaming_stdout_final_only import FinalStreamingStdOutCallbackHandler
+from langchain.utilities import SerpAPIWrapper
+from langchain.agents import load_tools
+
 
 #other imports
 import re
@@ -60,21 +61,9 @@ def Memory(user_context: str) -> str:
 def Unknown(user_context: str) -> str:
     """No tool is required parse the user's input using my own knowledge and jusdgement."""
     return f"Results"
-
-class SerpAPIWrapper:
-    def run(self):
-        return "some data"
-
-# Create Search tool and automatically add it to ALL_TOOLS
-search = SerpAPIWrapper()
-Tool(
-    name="Google_Search",
-    func=search.run,
-    description="Useful for when you don't know the answer and need to find more information online.",
-)
     
 # TOOLS HERE -----------------------------------------------------    
-tools = [Google_Search] 
+tools = load_tools(["serpapi"])
 
 #tools_string
     
