@@ -175,6 +175,12 @@ class CustomPromptTemplate(StringPromptTemplate):
         # Set the agent_scratchpad variable to that value
         kwargs["agent_scratchpad"] = thoughts
         ############## NEW ######################
+        # Get the best tool for the query
+        selected_tool = get_tools(kwargs.get("input", ""))[0] if get_tools(kwargs.get("input", "")) else "None"
+        
+        # Include the selected tool in thoughts
+        kwargs["agent_scratchpad"] += f"\nBest Tool: {selected_tool}\n"
+        
         return self.template.format(**kwargs)
 
 prompt = CustomPromptTemplate(
