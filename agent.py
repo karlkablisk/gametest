@@ -125,10 +125,15 @@ Ensure smooth conversation flow by referring to chat history.
 Decision-making logic:
 Question: {input}
 Thought: Consider the context and what tool, if any, would be best suited.
-Action: Take the necessary action; use a tool if relevant.
+Action: Take the necessary action; if a tool is relevant, check its availability before using it.
 Observation: Reflect on the action's outcome.
-Thought: Arrive at a conclusive response.
-Final Answer: Provide a well-thought-out answer.
+IF YOU GET INVALID TOOL:
+Thought: The tool I tried to use doesn't exist. I should rely on my memory and existing knowledge.
+Action: Proceed without using any tools, use your best judgment based on the situation.
+Observation: Reflect on the new action's outcome.
+Thought: Arrive at a conclusive response based on the new action.
+Final Answer: Provide a well-thought-out answer without relying on unavailable tools.
+
 
 {agent_scratchpad}
 """
