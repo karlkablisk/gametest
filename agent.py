@@ -114,8 +114,7 @@ Description: {description}
 Traits: {traits}
 Likes: {likes}
 
-You have access to the following tools:
-{tools}
+You have access tools
 
 If a tool isn't available, rely on your memory and existing knowledge.
 
