@@ -62,7 +62,7 @@ def Unknown(user_context: str) -> str:
     return f"Results"
     
 # TOOLS HERE -----------------------------------------------------    
-tools = [Unknown] 
+tools = [] 
 
 #tools_string
     
