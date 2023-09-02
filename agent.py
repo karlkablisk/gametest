@@ -148,7 +148,7 @@ class CustomPromptTemplate(StringPromptTemplate):
         kwargs["name"] = self.name
         kwargs["traits"] = self.traits
         kwargs["likes"] = self.likes
-        kwargs["description"] = self.get_description(kwargs.get("st_description", None))
+        kwargs["description"] = st_description
         # Get the intermediate steps (AgentAction, Observation tuples)
         # Format them in a particular way
         intermediate_steps = kwargs.pop("intermediate_steps")
