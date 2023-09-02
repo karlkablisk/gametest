@@ -122,7 +122,7 @@ Traits: {traits}
 Likes: {likes}
 
 You have access tools.
-Available tool names: serpapi
+Available tool names: Search
 
 If a tool isn't available, rely on your memory and existing knowledge.
 
