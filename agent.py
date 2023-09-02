@@ -58,8 +58,7 @@ def Memory(user_context: str) -> str:
 
 @tool
 def Unknown(user_context: str) -> str:
-    """I just tried to use an Unknown tool. That means the tool I tried to use doesn't exist. 
-    I should rely on my memory and existing knowledge and not use ANY tool."""
+    """No tool is required parse the user's input using my own knowledge and jusdgement."""
     return f"Results"
     
 # TOOLS HERE -----------------------------------------------------    
