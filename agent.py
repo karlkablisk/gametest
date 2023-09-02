@@ -121,7 +121,8 @@ Description: {description}
 Traits: {traits}
 Likes: {likes}
 
-You have access tools
+You have access tools.
+Available tool names: serpapi
 
 If a tool isn't available, rely on your memory and existing knowledge.
 
