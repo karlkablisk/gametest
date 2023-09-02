@@ -130,7 +130,7 @@ For straightforward queries, provide concise replies.
 Ensure smooth conversation flow by referring to chat history.
 
 Decision-making logic:
-Question: {input}
+User: {input}
 Thought: Consider the context and what tool, if any, would be best suited.
 Action: Take the necessary action; if a tool is relevant, check its availability before using it.
 Observation: Reflect on the action's outcome.
