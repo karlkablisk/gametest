@@ -126,6 +126,7 @@ You have access tools
 If a tool isn't available, rely on your memory and existing knowledge.
 
 Conversational Format:
+User: {input}, then thought abotu the user's input, then action, then observation, then final answer
 For straightforward queries, provide concise replies.
 Ensure smooth conversation flow by referring to chat history.
 
