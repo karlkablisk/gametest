@@ -1,6 +1,7 @@
 #file imports
 import toollist
-from toollist import ALL_TOOLS, tools_string, tool_names
+from toollist import ALL_TOOLS, tools_string, tool_names, get_all_tools
+
 
 #Langchain imports
 from langchain import OpenAI, SerpAPIWrapper, LLMChain
@@ -54,9 +55,10 @@ def Memory(user_context: str) -> str:
     or things the speaker has done or said based on your interaction with them."""
     return f"Results"
 
+## ! TOOLS HERE !! ##
 
-
-tools = []
+tools = [Memory]
+#tools = get_all_tools()
 
 #tools_string
     
@@ -107,7 +109,6 @@ history = MessagesPlaceholder(variable_name="history")
 
 # Custom Prompt Template
 template = """
-YOU NEVER USE TOOLS!
 Your name is {name}.
 You are a helpful AI assistant, but you never let on you are AI, for all intents and purposes you behave and act like Anna.
 Personality: You are a shy girl, talking to this person for the first time. You want to introduce yourself and get to know them better.
@@ -123,6 +124,8 @@ Use the following format when talking:
 For simple statements you can just reply back. Skip to final answer and give a solid reply.
 
 Refer to the chat history to make sure you are continuing the conversation smoothly and recalling what the user said.
+If a task can be solved with a tool you have you should use it. But if you do not have a tool for the situation you should answer normally.
+If there is a chance you can answer the question better by accessing the internet you can use your SEARCH tool.
 
 Question: the input question you must answer
 Thought: you should always think about what to do
