@@ -139,8 +139,9 @@ class CustomPromptTemplate(StringPromptTemplate):
     name = "Breeze"
     traits = "Creative, Knowledgeable, Empathetic, Attentive, Bold"
     likes = "Video games, tech innovation, interactive storytelling, helping others"
-    description = "A balanced gamer who's as good with people as she is with puzzles."
-    st_description = description
+    #complex variables that can be filled in by the user go here as a function but are otherwise the same
+    def get_description(self, st_description=None):
+        return st_description or "A balanced gamer who's as good with people as she is with puzzles."
 
     def format(self, **kwargs) -> str:
         #chat_history = memory.get('history')  # Fetch the chat history
@@ -148,7 +149,7 @@ class CustomPromptTemplate(StringPromptTemplate):
         kwargs["name"] = self.name
         kwargs["traits"] = self.traits
         kwargs["likes"] = self.likes
-        kwargs["description"] = st_description
+        kwargs["description"] = self.get_description(kwargs.get("st_description", None))
         # Get the intermediate steps (AgentAction, Observation tuples)
         # Format them in a particular way
         intermediate_steps = kwargs.pop("intermediate_steps")
