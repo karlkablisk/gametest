@@ -23,6 +23,12 @@ Tool(
     description="Useful for when you don't know the answer and need to find more information online.",
 )
 
+# Create fake tools and automatically add them to ALL_TOOLS
+#    Tool(
+#        name=f"sample",
+#        func=fake_func,
+#        description=f"a silly function that you can use to get more information about the number",
+#    )
     
 # Tool function
 def discover_item_tool(user_context: str, difficulty: int) -> str:
@@ -64,15 +70,9 @@ tools = [
 
 
 # Construct the string representation
-#tool_names = [f"[{tool.name}]" for tool in ALL_TOOLS]
-#tools_string = ' + '.join(tool_names)
+tool_names = [f"[{tool.name}]" for tool in ALL_TOOLS]
+tools_string = ' + '.join(tool_names)
 tool_names = ', '.join([tool.name for tool in ALL_TOOLS])
 
-def tools_string():
-    return ", ".join([tool.__name__ for tool in ALL_TOOLS])
 
-
-def get_all_tools():
-    return ALL_TOOLS
-#print(tools_string)
-
+print(tools_string)
