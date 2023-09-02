@@ -60,9 +60,21 @@ def Memory(user_context: str) -> str:
 def Unknown(user_context: str) -> str:
     """No tool is required parse the user's input using my own knowledge and jusdgement."""
     return f"Results"
+
+class SerpAPIWrapper:
+    def run(self):
+        return "some data"
+
+# Create Search tool and automatically add it to ALL_TOOLS
+search = SerpAPIWrapper()
+Tool(
+    name="Google_Search",
+    func=search.run,
+    description="Useful for when you don't know the answer and need to find more information online.",
+)
     
 # TOOLS HERE -----------------------------------------------------    
-tools = [] 
+tools = [Google_Search] 
 
 #tools_string
     
