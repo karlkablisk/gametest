@@ -55,9 +55,14 @@ def Memory(user_context: str) -> str:
     This means remember, recall, and seeing if you know any personal facts about the speaker 
     or things the speaker has done or said based on your interaction with them."""
     return f"Results"
+
+@tool
+def Invalid_tool_protocol(user_context: str) -> str:
+    """The tool I tried to use doesn't exist. I should rely on my memory and existing knowledge and not use ANY tool."""
+    return f"Results"
     
 # TOOLS HERE -----------------------------------------------------    
-tools = [] 
+tools = [Invalid_tool_protocol] 
 
 #tools_string
     
@@ -127,6 +132,7 @@ Question: {input}
 Thought: Consider the context and what tool, if any, would be best suited.
 Action: Take the necessary action; if a tool is relevant, check its availability before using it.
 Observation: Reflect on the action's outcome.
+Final Answer: Provide a well-thought-out answer without relying on unavailable tools.
 IF YOU GET INVALID TOOL:
 Thought: The tool I tried to use doesn't exist. I should rely on my memory and existing knowledge.
 Action: Proceed without using any tools, use your best judgment based on the situation.
