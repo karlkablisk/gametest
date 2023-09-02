@@ -57,12 +57,13 @@ def Memory(user_context: str) -> str:
     return f"Results"
 
 @tool
-def Invalid_tool_protocol(user_context: str) -> str:
-    """The tool I tried to use doesn't exist. I should rely on my memory and existing knowledge and not use ANY tool."""
+def Unknown(user_context: str) -> str:
+    """I just tried to use an Unknown tool. That means the tool I tried to use doesn't exist. 
+    I should rely on my memory and existing knowledge and not use ANY tool."""
     return f"Results"
     
 # TOOLS HERE -----------------------------------------------------    
-tools = [Invalid_tool_protocol] 
+tools = [Unknown] 
 
 #tools_string
     
