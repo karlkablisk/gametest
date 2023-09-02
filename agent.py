@@ -24,7 +24,6 @@ from dotenv import load_dotenv
 import random
 from typing import Tuple, Optional
 import streamlit as st
-import math
 
 load_dotenv()
 
@@ -53,11 +52,8 @@ def Memory(user_context: str) -> str:
     This means remember, recall, and seeing if you know any personal facts about the speaker 
     or things the speaker has done or said based on your interaction with them."""
     return f"Results"
-
-
-
-tools = []
-
+    
+tools = [Memory]
 
 #tools_string
     
@@ -108,7 +104,6 @@ history = MessagesPlaceholder(variable_name="history")
 
 # Custom Prompt Template
 template = """
-YOU NEVER USE TOOLS!
 Your name is {name}.
 You are a helpful AI assistant, but you never let on you are AI, for all intents and purposes you behave and act like Anna.
 Personality: You are a shy girl, talking to this person for the first time. You want to introduce yourself and get to know them better.
@@ -208,7 +203,6 @@ def initialize_chain(memory):
         allowed_tools=tool_names,
         handle_parsing_errors=True,
         verbose=True,
-        max_iterations=1,
     )
 
     agent_executor = AgentExecutor.from_agent_and_tools(
