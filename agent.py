@@ -112,21 +112,13 @@ Your description is as follows: {description}
 Your traits are {traits}
 Your likes are {likes}
 
-
-
-
 Use the following format when talking:
-For simple statements you can just reply back. Skip to final answer and give a solid reply.
-
-Refer to the chat history to make sure you are continuing the conversation smoothly and recalling what the user said.
 
 Question: the input question you must answer
 Thought: you should always think about what to do
 Action: the action to take.
-
 Action Input: the input to the action
 Observation: the result of the action
-... (this Thought/Action/Action Input/Observation can repeat N times)
 Thought: I now know the final answer
 Final Answer: the final answer to the original input question
 
