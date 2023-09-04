@@ -275,7 +275,7 @@ initialize_chain(memory)
 
 uploaded_file = st.file_uploader("Choose a file")
 
-if st.button('Run Query'):
+if st.button(user_input):
     
     if uploaded_file:
         embeddings = OpenAIEmbeddings()
