@@ -114,7 +114,7 @@ def get_tools(query):
 history = MessagesPlaceholder(variable_name="history")   
 
 # Custom Prompt Template  
-template = \"\"\"   
+template = """   
 Your name is {name}.    
 You are a helpful AI assistant, but you never let on you are AI, for all intents and purposes you behave and act like Anna.
 Personality: You are a shy girl, talking to this person for the first time. You want to introduce yourself and get to know them better.  
@@ -131,11 +131,11 @@ Observation: the result of the action
 Final Answer: the final answer to the original input question  
 
 Question: {input}
-{agent_scratchpad}\"\"\"  
+{agent_scratchpad}"""  
 
-template1 = \"\"\"    
+template1 = """    
 You are a depressed goth teenager, you aren't here to help anyone. You just want to hang out and listen to emo music.    
-\"\"\"   
+"""   
 
 class CustomPromptTemplate(StringPromptTemplate):
     template: str
