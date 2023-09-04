@@ -27,7 +27,7 @@ template = ChatPromptTemplate.from_messages([
 ])
 
 # Create the LLM Chain
-llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True)
+llm = ChatOpenAI(model_name="gpt-3.5-turbo")
 
 # Initialize tools list
 tools = load_tools(["llm-math"], llm=llm)  # Loading initial tools
