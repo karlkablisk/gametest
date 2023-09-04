@@ -58,7 +58,7 @@ def Unknown(user_context: str) -> str:
     """To use this tool, say what you are thinking as your FINAL ANSWER"""
     return f"Results"
     
-tools = [Memory]
+tools = [Memory, Unknown]
 
 #tools_string
     
