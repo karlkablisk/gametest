@@ -59,6 +59,7 @@ def Unknown(user_context: str) -> str:
     return f"Results"
     
 tools = [Memory, Unknown]
+tool_names = Memory
 
 #tools_string
     
@@ -165,8 +166,9 @@ class CustomPromptTemplate(StringPromptTemplate):
             [f"{tool.name}: {tool.description}" for tool in tools]
         )
         # Create a list of tool names for the tools provided
-        kwargs["tool_names"] = ", ".join([tool.name for tool in tools])
+        #kwargs["tool_names"] = ", ".join([tool.name for tool in tools])
         return self.template.format(**kwargs)
+
 
 prompt = CustomPromptTemplate(
     template=template,
@@ -197,6 +199,7 @@ def initialize_chain(memory):
         allowed_tools=tool_names,
         handle_parsing_errors=True,
         verbose=True,
+        max_iterations_per_tool=1,
     )
 
     agent_executor = AgentExecutor.from_agent_and_tools(
