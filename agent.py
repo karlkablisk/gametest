@@ -19,7 +19,7 @@ from langchain.prompts import MessagesPlaceholder
 from langchain.llms import OpenAI
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores.faiss import FAISS
-from langchain.qa import RetrievalQA
+from langchain.chains import RetrievalQA
 from langchain.document_loaders import WebBaseLoader
 
 #other imports
