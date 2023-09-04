@@ -52,6 +52,11 @@ def Memory(user_context: str) -> str:
     This means remember, recall, and seeing if you know any personal facts about the speaker 
     or things the speaker has done or said based on your interaction with them."""
     return f"Results"
+
+@tool
+def Unknown(user_context: str) -> str:
+    """To use this tool, say what you are thinking as your FINAL ANSWER"""
+    return f"Results"
     
 tools = [Memory]
 
