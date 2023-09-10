@@ -275,7 +275,7 @@ initialize_chain(memory)
 
 uploaded_file = st.file_uploader("Choose a file")
 
-input_text = st.text_input("Your Input", "Type here")
+input_text = st.text_input("Your Input", "Type here1")
 if st.button(input_text):
     
     if uploaded_file:
