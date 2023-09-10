@@ -276,8 +276,7 @@ initialize_chain(memory)
 uploaded_file = st.file_uploader("Choose a file")
 
 input_text = st.text_input("Your Input", "Type here")
-user_input = "Send"
-if st.button(user_input):
+if st.button(input_text):
     
     if uploaded_file:
         embeddings = OpenAIEmbeddings()
