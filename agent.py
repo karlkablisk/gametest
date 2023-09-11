@@ -75,7 +75,8 @@ def Unknown(user_context: str) -> str:
     return f"Results"
     
 # TOOLS HERE -----------------------------------------------------    
-tools = load_tools(["serpapi"])
+#tools = load_tools(["serpapi"])
+tools = []
 
 #tools_string
     
