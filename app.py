@@ -11,6 +11,7 @@ from langchain.document_loaders import TextLoader, WebBaseLoader
 from dotenv import load_dotenv
 from langchain.utilities import SerpAPIWrapper
 from langchain.agents import load_tools
+from langchain.callbacks import StreamlitCallbackHandler
 import numpy as np
 from io import BytesIO
 
@@ -33,6 +34,9 @@ text = json.dumps(response.json())
 question = st.text_input("What's your question?")
 
 embeddings_file_data = None
+
+# Initialize StreamlitCallbackHandler
+st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 
 if st.button('Run Query'):
     text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
@@ -68,7 +72,7 @@ if st.button('Run Query'):
     # Initialize Agent
     agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
     answer = agent.run(question)
-    st.write(f'Answer: {answer}')
+    st.write(f'Answer: {answer}', callbacks=[st_cb])
 
 if embeddings_file_data is not None and st.button('Download Embeddings File'):
     # Convert the embeddings to a .npy file and allow the user to download it
