@@ -64,4 +64,4 @@ if st.button('Run Query'):
     # Initialize Agent
     agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
     answer = agent.run(question)
-    st.write(f'Answer: {answer}', callbacks=[st_cb])
+    st.write(f'Answer: {answer}')
