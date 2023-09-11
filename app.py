@@ -11,8 +11,6 @@ from langchain.document_loaders import TextLoader, WebBaseLoader
 from dotenv import load_dotenv
 from langchain.utilities import SerpAPIWrapper
 from langchain.agents import load_tools
-import requests
-import json
 
 load_dotenv()
 
@@ -21,13 +19,12 @@ embeddings = OpenAIEmbeddings()
 llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True)
 
 # Streamlit UI
-st.title('Arrowtokyo AI Chat')
+st.title('AI Shadowrun')
 
-# Fetching data directly from the URL and storing it as 'text'
-response = requests.get('https://arrowtokyo.com/en/arrow/rest/products')
-text = json.dumps(response.json())
-
+uploaded_file = st.file_uploader("Choose a State of the Union file")
+url = st.text_input("Paste a Ruff FAQ URL")
 question = st.text_input("What's your question?")
+
 
 if st.button('Run Query'):
     text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
@@ -35,8 +32,9 @@ if st.button('Run Query'):
     # Initialize tools list
     tools = []
     
-    # Use the text fetched from the URL
-    if text:
+    # Load State of the Union document
+    if uploaded_file:
+        text = uploaded_file.read().decode('utf-8')
         splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
         class PageContent:
             def __init__(self, content):
@@ -54,6 +52,30 @@ if st.button('Run Query'):
                 description="Question about the uploaded file."
             )
         )
+        
+    # Load Websiteloader FAQ
+    if url:
+        loader = WebBaseLoader(url)
+        ruff_docs = loader.load()
+        ruff_texts = text_splitter.split_documents(ruff_docs)
+        ruff_db = FAISS.from_documents(ruff_texts, embeddings)  
+        ruff = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=ruff_db.as_retriever())
+        tools.append(
+            Tool(
+                name="URL Question",
+                func=ruff.run,
+                description="Question about the URL content."
+            )
+        )
+        
+    # Load Search Tool
+    if url:
+        search_docs = loader.load()
+        search_texts = text_splitter.split_documents(ruff_docs)
+        search_db = FAISS.from_documents(ruff_texts, embeddings)  
+        search = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=ruff_db.as_retriever())
+        tools.extend(load_tools(["serpapi"]))
+
         
     # Initialize Agent
     agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
