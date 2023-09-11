@@ -11,6 +11,7 @@ from langchain.document_loaders import TextLoader, WebBaseLoader
 from dotenv import load_dotenv
 from langchain.utilities import SerpAPIWrapper
 from langchain.agents import load_tools
+import requests
 
 load_dotenv()
 
