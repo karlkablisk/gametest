@@ -11,9 +11,8 @@ from langchain.document_loaders import TextLoader, WebBaseLoader
 from dotenv import load_dotenv
 from langchain.utilities import SerpAPIWrapper
 from langchain.agents import load_tools
-from langchain.callbacks import StreamlitCallbackHandler
 import numpy as np
-from io import BytesIO
+
 
 import requests
 import json
@@ -35,9 +34,6 @@ question = st.text_input("What's your question?")
 
 embeddings_file_data = None
 
-# Initialize StreamlitCallbackHandler
-st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
-
 if st.button('Run Query'):
     text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
     
@@ -55,8 +51,17 @@ if st.button('Run Query'):
         texts = splitter.split_documents([PageContent(text)])
         reference_file_db = FAISS.from_documents(texts, embeddings)  
         
-        # Store the embeddings data in a variable for later use
-        embeddings_file_data = reference_file_db.embeddings
+        # Convert the embeddings to a .npy file and allow the user to download it
+        np.save('embeddings.npy', reference_file_db.embeddings)
+        st.download_button(
+            label="Download embeddings file",
+            data=bytes(open('embeddings.npy', 'rb').read()),
+            file_name='embeddings.npy',
+            mime='application/octet-stream'
+        )
+        
+         # Store the embeddings data in a variable
+        embeddings_file_data = bytes(np.save_to_buffer(reference_file_db.embeddings))
         
         reference_file = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=reference_file_db.as_retriever())
     
@@ -72,16 +77,12 @@ if st.button('Run Query'):
     # Initialize Agent
     agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
     answer = agent.run(question)
-    st.write(f'Answer: {answer}', callbacks=[st_cb])
+    st.write(f'Answer: {answer}')
 
-if embeddings_file_data is not None and st.button('Download Embeddings File'):
-    # Convert the embeddings to a .npy file and allow the user to download it
-    buffer = BytesIO()
-    np.save(buffer, embeddings_file_data)
-    buffer.seek(0)
+if embeddings_file_data and st.button('Download Embeddings File'):
     st.download_button(
         label="Download embeddings file",
-        data=buffer.read(),
+        data=embeddings_file_data,
         file_name='embeddings.npy',
         mime='application/octet-stream'
     )
