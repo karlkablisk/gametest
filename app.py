@@ -13,7 +13,6 @@ from langchain.utilities import SerpAPIWrapper
 from langchain.agents import load_tools
 import numpy as np
 
-
 import requests
 import json
 
@@ -32,8 +31,6 @@ text = json.dumps(response.json())
 
 question = st.text_input("What's your question?")
 
-embeddings_file_data = None
-
 if st.button('Run Query'):
     text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
     
@@ -50,21 +47,7 @@ if st.button('Run Query'):
 
         texts = splitter.split_documents([PageContent(text)])
         reference_file_db = FAISS.from_documents(texts, embeddings)  
-        
-        # Convert the embeddings to a .npy file and allow the user to download it
-        np.save('embeddings.npy', reference_file_db.embeddings)
-        st.download_button(
-            label="Download embeddings file",
-            data=bytes(open('embeddings.npy', 'rb').read()),
-            file_name='embeddings.npy',
-            mime='application/octet-stream'
-        )
-        
-         # Store the embeddings data in a variable
-        embeddings_file_data = bytes(np.save_to_buffer(reference_file_db.embeddings))
-        
         reference_file = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=reference_file_db.as_retriever())
-    
 
         tools.append(
             Tool(
@@ -78,11 +61,3 @@ if st.button('Run Query'):
     agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
     answer = agent.run(question)
     st.write(f'Answer: {answer}')
-
-if embeddings_file_data and st.button('Download Embeddings File'):
-    st.download_button(
-        label="Download embeddings file",
-        data=embeddings_file_data,
-        file_name='embeddings.npy',
-        mime='application/octet-stream'
-    )
