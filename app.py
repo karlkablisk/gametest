@@ -13,15 +13,21 @@ from langchain.utilities import SerpAPIWrapper
 from langchain.agents import load_tools
 import requests
 import json
+from agent import initialize_chain, get_response # Import necessary functions from agent.py
+
 
 load_dotenv()
+
+# Initialize your AI agent
+initialize_chain()
+
 
 # Initialize embeddings and LLM.
 embeddings = OpenAIEmbeddings()
 llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True)
 
 # Streamlit UI
-st.title('AI Shadowrun')
+st.title('Arrowtokyo.com Support')
 
 # Fetching data directly from the URL and storing it as 'text'
 response = requests.get('https://arrowtokyo.com/en/arrow/rest/products')
@@ -30,6 +36,10 @@ text = json.dumps(response.json())
 question = st.text_input("What's your question?")
 
 if st.button('Run Query'):
+    # Get response from AI agent
+    answer = get_response(question)
+    st.write(f'Answer: {answer}')
+    
     text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
     
     # Initialize tools list

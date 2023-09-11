@@ -32,6 +32,14 @@ import streamlit as st
 
 load_dotenv()
 
+def get_response(question: str) -> str:
+    global agent_executor
+    agent_executor.reset() # Reset agent's state
+
+    response = agent_executor.run(input={"input": question, "chat_history": []})
+
+    return response['output']
+
 
 #ALL TOOLS  
 
