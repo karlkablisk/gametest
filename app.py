@@ -17,6 +17,8 @@ import requests
 import json
 
 load_dotenv()
+embeddings_file_data = None
+
 
 # Initialize embeddings and LLM.
 embeddings = OpenAIEmbeddings()
