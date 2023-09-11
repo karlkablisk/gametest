@@ -41,8 +41,8 @@ homemodel = "meta/llama-2" #need to edit this
 #Planner and executor
 model = ChatOpenAI(model_name=main_model, temprature=0)
 
-planner = load_chat_planner(model)
-executor = load_agent_executor(model, tools, verbose=True)
+#planner = load_chat_planner(model)
+#executor = load_agent_executor(model, tools, verbose=True)
 
 #ALL TOOLS
 
