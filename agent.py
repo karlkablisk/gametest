@@ -32,6 +32,23 @@ import streamlit as st
 load_dotenv()
 
 
+def plan_action(user_input):
+    # Logic to decide which tool to use based on user_input
+    # Here, I'm using the get_tools function to get the best tool for the query
+    tools = get_tools(user_input)
+    selected_tool = tools[0] if tools else "Unknown"
+    return selected_tool
+
+def execute_action(tool, user_input):
+    # Logic to execute the action based on the selected tool and user_input
+    if tool == "Unknown":
+        # Handle unknown tool here
+        return f"Using my own judgement for: {user_input}"
+    else:
+        # Execute the tool function here (assuming tool functions are available globally)
+        return globals()[tool](user_input)
+
+
 #ALL TOOLS
 
 # Custom tools
