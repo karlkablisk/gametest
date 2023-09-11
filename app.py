@@ -13,18 +13,24 @@ from langchain.utilities import SerpAPIWrapper
 from langchain.agents import load_tools
 import requests
 import json
-from agent import initialize_chain, get_response # Import necessary functions from agent.py
+from agent import initialize_chain, CustomPromptTemplate, tools, get_tools
+from langchain.chat_models import ChatOpenAI
+from langchain.memory import ConversationBufferMemory  
 
 
 load_dotenv()
 
-# Initialize your AI agent
-initialize_chain()
+
 
 
 # Initialize embeddings and LLM.
 embeddings = OpenAIEmbeddings()
 llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True)
+memory = ConversationBufferMemory(memory_key="history", input_key="input", return_messages=True)
+
+# Initialize agent 
+agent_executor = initialize_chain(memory) 
+
 
 # Streamlit UI
 st.title('Arrowtokyo.com Support')
@@ -36,10 +42,6 @@ text = json.dumps(response.json())
 question = st.text_input("What's your question?")
 
 if st.button('Run Query'):
-    # Get response from AI agent
-    answer = get_response(question)
-    st.write(f'Answer: {answer}')
-    
     text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
     
     # Initialize tools list
@@ -66,6 +68,16 @@ if st.button('Run Query'):
         )
         
     # Initialize Agent
-    agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
-    answer = agent.run(question)
-    st.write(f'Answer: {answer}')
+    #agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
+    #answer = agent.run(question)
+    
+    input_data = {
+      'input': question
+    }
+
+    agent_output = agent_executor.run(
+        input_data=input_data,
+        tools=tools
+    )
+
+    st.write(agent_output.output)
