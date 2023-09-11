@@ -21,7 +21,7 @@ embeddings = OpenAIEmbeddings()
 llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True)
 
 # Streamlit UI
-st.title('Arrowtokyo.com AI Chat')
+st.title('Arrowtokyo AI Chat')
 
 # Fetching data directly from the URL and storing it as 'text'
 response = requests.get('https://arrowtokyo.com/en/arrow/rest/products')
