@@ -15,7 +15,7 @@ WEBHOOK_URL = st.secrets["WEBHOOK_URL"]
 FLASK_URL = 'http://Karldiscordbottodb.karlkablisk.repl.co/messages'  # Replace with your Flask app URL
 
 # Initialize the agent executor
-agent_executor = agent.get_agent_executor()
+agent_executor = agent.openai_agent()
 
 def fetch_messages():
     response = requests.get(FLASK_URL)
