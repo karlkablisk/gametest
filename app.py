@@ -64,12 +64,12 @@ if st.button('Run Query'):
     answer = agent.run(question)
     st.write(f'Answer: {answer}')
 
-if embeddings_file_data is not None and st.button('Download Embeddings File'):
+#if embeddings_file_data is not None and st.button('Download Embeddings File'):
     # Convert the embeddings to a json file and allow the user to download it
-    json_embeddings = json.dumps(embeddings_file_data.tolist())
-    st.download_button(
-        label="Download embeddings file",
-        data=json_embeddings.encode('utf-8'),
-        file_name='embeddings.json',
-        mime='application/json'
-    )
+#    json_embeddings = json.dumps(embeddings_file_data.tolist())
+#    st.download_button(
+#        label="Download embeddings file",
+ #       data=json_embeddings.encode('utf-8'),
+#        file_name='embeddings.json',
+  #      mime='application/json'
+  #  )
