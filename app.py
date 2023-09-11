@@ -11,6 +11,7 @@ from langchain.document_loaders import TextLoader, WebBaseLoader
 from dotenv import load_dotenv
 from langchain.utilities import SerpAPIWrapper
 from langchain.agents import load_tools
+import numpy as np
 
 import requests
 import json
@@ -60,3 +61,13 @@ if st.button('Run Query'):
     agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
     answer = agent.run(question)
     st.write(f'Answer: {answer}')
+
+if embeddings_file_data is not None and st.button('Download Embeddings File'):
+    # Convert the embeddings to a json file and allow the user to download it
+    json_embeddings = json.dumps(embeddings_file_data.tolist())
+    st.download_button(
+        label="Download embeddings file",
+        data=json_embeddings.encode('utf-8'),
+        file_name='embeddings.json',
+        mime='application/json'
+    )
