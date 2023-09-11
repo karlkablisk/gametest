@@ -11,6 +11,7 @@ from langchain.document_loaders import TextLoader, WebBaseLoader
 from dotenv import load_dotenv
 from langchain.utilities import SerpAPIWrapper
 from langchain.agents import load_tools
+import numpy as np
 
 import requests
 import json
@@ -46,6 +47,10 @@ if st.button('Run Query'):
 
         texts = splitter.split_documents([PageContent(text)])
         reference_file_db = FAISS.from_documents(texts, embeddings)  
+        
+        # Save the embeddings to a .npy file
+        np.save('embeddings.npy', reference_file_db.embeddings)
+        
         reference_file = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=reference_file_db.as_retriever())
 
         tools.append(
