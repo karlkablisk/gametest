@@ -5,7 +5,7 @@ from toollist import ALL_TOOLS, tools_string, tool_names
 #Langchain imports
 from langchain import OpenAI, SerpAPIWrapper, LLMChain
 from langchain.tools import tool
-from langchain.agents import Tool, AgentExecutor, LLMSingleActionAgent, AgentOutputParser
+from langchain.agents import Tool, AgentExecutor, LLMSingleActionAgent, AgentOutputParser, initialize_agent, AgentType
 from langchain.prompts import StringPromptTemplate
 from langchain.chat_models import ChatOpenAI
 from langchain.vectorstores import FAISS
@@ -18,7 +18,7 @@ from langchain.prompts import MessagesPlaceholder
 from langchain.callbacks.streaming_stdout_final_only import FinalStreamingStdOutCallbackHandler
 from langchain.utilities import SerpAPIWrapper
 from langchain.agents import load_tools
-
+from langchain_experimental.plan_and_execute import PlanAndExecute, load_agent_executor, load_chat_planner
 
 #other imports
 import re
@@ -31,23 +31,18 @@ import streamlit as st
 
 load_dotenv()
 
+#LLM AND MODELS
+main_model = "gpt-3.5-turbo"
+strong_model = "gpt-4"
+gpt35_16 = "gpt-3.5-turbo-16k"
+gpt4_16 = "gpt-4-16k"
+homemodel = "meta/llama-2" #need to edit this
 
-def plan_action(user_input):
-    # Logic to decide which tool to use based on user_input
-    # Here, I'm using the get_tools function to get the best tool for the query
-    tools = get_tools(user_input)
-    selected_tool = tools[0] if tools else "Unknown"
-    return selected_tool
+#Planner and executor
+model = ChatOpenAI(model_name=main_model, temprature=0)
 
-def execute_action(tool, user_input):
-    # Logic to execute the action based on the selected tool and user_input
-    if tool == "Unknown":
-        # Handle unknown tool here
-        return f"Using my own judgement for: {user_input}"
-    else:
-        # Execute the tool function here (assuming tool functions are available globally)
-        return globals()[tool](user_input)
-
+planner = load_chat_planner(model)
+executor = load_agent_executor(model, tools, verbose=True)
 
 #ALL TOOLS
 
@@ -86,12 +81,7 @@ tools = load_tools(["serpapi"])
     
 #TOOLS END
 
-#LLM AND MODELS
-main_model = "gpt-3.5-turbo"
-strong_model = "gpt-4"
-gpt35_16 = "gpt-3.5-turbo-16k"
-gpt4_16 = "gpt-4-16k"
-homemodel = "meta/llama-2" #need to edit this
+
 
 llm = ChatOpenAI(model_name=main_model, temperature=0.2, streaming=True, callbacks=[FinalStreamingStdOutCallbackHandler()])
 #llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True,temperature=0.2)
@@ -265,6 +255,8 @@ output_parser = CustomOutputParser()
 
 #AGENT AND EXECUTOR
 
+#agent = PlanAndExecute(planner=planner, executor=executor, verbose=True)
+
 agent = LLMSingleActionAgent(
     llm_chain=llm_chain,
     output_parser=output_parser,
@@ -274,7 +266,7 @@ agent = LLMSingleActionAgent(
 )
 
 agent_executor = AgentExecutor.from_agent_and_tools(
-    agent=agent, 
+    agent=AgentType.OPENAI_FUNCTIONS, 
     tools=tools, 
     verbose=True,
     agent_kwargs = {

@@ -37,15 +37,11 @@ st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 
 if st.button("Send"):
     with st.container():
-        # Plan and execute system
-        selected_tool = agent.plan_action(user_input)
-        result = agent.execute_action(selected_tool, user_input)
-        
+        result = agent_executor.run(user_input, callbacks=[st_cb])
         st.write(result)
         agent.memory.load_memory_variables([])
         send_to_discord(result)  # Sending to Discord
         st.session_state['chat_memory'] = agent.memory.chat_memory
-
 
 # Sidebar
 with st.sidebar:
