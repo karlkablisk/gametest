@@ -129,6 +129,30 @@ Description: {description}
 Traits: {traits}
 Likes: {likes}
 
+You have access tools.
+Available tool names: Search
+
+If a tool isn't available, rely on your memory and existing knowledge.
+
+Conversational Format:
+User: {input}, then thought abotu the user's input, then action, then observation, then final answer
+For straightforward queries, provide concise replies.
+Ensure smooth conversation flow by referring to chat history.
+
+Decision-making logic:
+User: {input}
+Thought: Consider the context and what tool, if any, would be best suited.
+Action: Take the necessary action; if a tool is relevant, check its availability before using it.
+Observation: Reflect on the action's outcome.
+Final Answer: Provide a well-thought-out answer without relying on unavailable tools.
+IF YOU GET INVALID TOOL:
+Thought: The tool I tried to use doesn't exist. I should rely on my memory and existing knowledge.
+Action: Proceed without using any tools, use your best judgment based on the situation.
+Observation: Reflect on the new action's outcome.
+Thought: Arrive at a conclusive response based on the new action.
+Final Answer: Provide a well-thought-out answer without relying on unavailable tools.
+
+
 {agent_scratchpad}
 """
 
