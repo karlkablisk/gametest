@@ -48,10 +48,17 @@ if st.button('Run Query'):
         texts = splitter.split_documents([PageContent(text)])
         reference_file_db = FAISS.from_documents(texts, embeddings)  
         
-        # Save the embeddings to a .npy file
+        # Convert the embeddings to a .npy file and allow the user to download it
         np.save('embeddings.npy', reference_file_db.embeddings)
+        st.download_button(
+            label="Download embeddings file",
+            data=bytes(open('embeddings.npy', 'rb').read()),
+            file_name='embeddings.npy',
+            mime='application/octet-stream'
+        )
         
         reference_file = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=reference_file_db.as_retriever())
+        
 
         tools.append(
             Tool(
