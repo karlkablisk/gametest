@@ -11,8 +11,6 @@ from langchain.document_loaders import TextLoader, WebBaseLoader
 from dotenv import load_dotenv
 from langchain.utilities import SerpAPIWrapper
 from langchain.agents import load_tools
-import numpy as np
-from langchain.callbacks import StreamlitCallbackHandler
 
 import requests
 import json
@@ -25,9 +23,6 @@ llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True)
 
 # Streamlit UI
 st.title('Arrowtokyo AI Chat')
-
-# Initialize StreamlitCallbackHandler
-st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 
 # Fetching data directly from the URL and storing it as 'text'
 response = requests.get('https://arrowtokyo.com/en/arrow/rest/products')
