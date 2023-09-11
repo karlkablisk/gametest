@@ -24,7 +24,7 @@ st.title('AI Shadowrun')
 
 # Fetching data directly from the URL and storing it as 'text'
 response = requests.get('https://arrowtokyo.com/en/arrow/rest/products')
-text = response.json()
+text = json.dumps(response.json())
 
 question = st.text_input("What's your question?")
 
