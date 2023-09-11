@@ -12,6 +12,9 @@ from dotenv import load_dotenv
 from langchain.utilities import SerpAPIWrapper
 from langchain.agents import load_tools
 from langchain.callbacks import StreamlitCallbackHandler
+from pydantic import BaseModel, Field
+from langchain.output_parsers import PydanticOutputParser, OutputParserException
+
 import numpy as np
 from io import BytesIO
 
@@ -34,6 +37,27 @@ text = json.dumps(response.json())
 question = st.text_input("What's your question?")
 
 embeddings_file_data = None
+
+class AutoFixingOutputParser:
+    def __init__(self, original_parser, fallback_llm):
+        self.original_parser = original_parser
+        self.fallback_llm = fallback_llm
+
+    def parse(self, output):
+        try:
+            return self.original_parser.parse(output)
+        except OutputParserException as e:
+            # Here, you might invoke the fallback_llm to attempt to fix the output, 
+            # or implement other error handling logic
+            # For the sake of the example, I'm simply re-raising the exception
+            raise e
+
+# Initialize your existing output parser and the fallback LLM
+original_parser = PydanticOutputParser(pydantic_object=ExpectedOutputSchema)
+fallback_llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True)
+
+# Create the auto-fixing output parser
+auto_fixing_parser = AutoFixingOutputParser(original_parser, fallback_llm)
 
 # Initialize StreamlitCallbackHandler
 st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
@@ -85,3 +109,5 @@ if embeddings_file_data is not None and st.button('Download Embeddings File'):
         file_name='embeddings.npy',
         mime='application/octet-stream'
     )
+
+
