@@ -266,7 +266,7 @@ agent = LLMSingleActionAgent(
 )
 
 agent_executor = AgentExecutor.from_agent_and_tools(
-    agent=AgentType.OPENAI_FUNCTIONS, 
+    agent=agent, 
     tools=tools, 
     verbose=True,
     agent_kwargs = {
