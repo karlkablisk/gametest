@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 from langchain.utilities import SerpAPIWrapper
 from langchain.agents import load_tools
 import requests
+import json
 
 load_dotenv()
 
