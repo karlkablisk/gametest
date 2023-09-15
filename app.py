@@ -4,17 +4,14 @@ import agent
 from agent import msgs
 from dotenv import load_dotenv
 import requests
-import subprocess
-import time
+import threading
 
 load_dotenv()
 
 FLASK_URL = 'http://Karldiscordbottodb.karlkablisk.repl.co/messages'
-
 agent_executor = agent.get_agent_executor()
 
 st.title("Breeze-chan Chat")
-
 st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 
 user_input = st.text_input("Enter your query:")
@@ -28,7 +25,6 @@ if st.button("Send"):
         if response.status_code != 200:
             st.write(f"Failed to send message to Discord bot, status code: {response.status_code}")
 
-
 with st.sidebar:
     st_description = st.text_input("log:")
 
@@ -41,3 +37,16 @@ def trigger_streamlit_with_discord_message(message):
         if response.status_code != 200:
             st.write(f"Failed to send message to Discord bot, status code: {response.status_code}")
 
+def fetch_discord_messages():
+    while True:
+        response = requests.get('http://Karldiscordbottodb.karlkablisk.repl.co/get_discord_messages')
+        if response.status_code == 200:
+            discord_messages = response.json()
+            for msg in discord_messages:
+                # Update Streamlit UI with new messages
+                st.write(f"{msg['username']}: {msg['message']}")
+        time.sleep(5)  # Poll every 5 seconds
+
+# Run the fetch_discord_messages function in a separate thread
+thread = Thread(target=fetch_discord_messages)
+thread.start()
