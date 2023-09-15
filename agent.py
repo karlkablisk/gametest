@@ -108,7 +108,7 @@ def get_tools(query):
     return [tools[d.metadata["index"]] for d in docs if 0 <= d.metadata["index"] < len(tools)]
 
 
-
+ 
 
 #DATA STORAGE END
 history = MessagesPlaceholder(variable_name="history")
