@@ -70,13 +70,18 @@ def Memory(user_context: str) -> str:
     return f"Results"
 
 @tool
+def Final_Answer(user_context: str) -> str:
+    """ALWAYS use this tool FIRST. You give the final answer to the question the user asked."""
+    return f"Results"
+
+@tool
 def Unknown(user_context: str) -> str:
     """No tool is required parse the user's input using my own knowledge and jusdgement."""
     return f"Results"
     
 # TOOLS HERE -----------------------------------------------------    
 #tools = load_tools(["serpapi"])
-tools = []
+tools = (["Final_Answer"])
 
 #tools_string
     
