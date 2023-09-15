@@ -115,7 +115,7 @@ history = MessagesPlaceholder(variable_name="history")
 
 # Custom Prompt Template
 template = """
-Your name is {name}. You are a helpful AI assistant with the persona of {persona}. 
+Your name is {name}. You are a helpful AI assistant with the persona of. 
 
 When asked a question, follow this process:
 
