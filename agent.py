@@ -225,20 +225,23 @@ class CustomOutputParser(AgentOutputParser):
         )
 
 class SimplifiedOutputParser(AgentOutputParser):
-    def parse(self, llm_output: str) -> Union[AgentAction, AgentFinish]:
+
+    def parse(self, llm_output):
+        
         if "Final Answer:" in llm_output:
+            # Return final answer
             return AgentFinish(
-                return_values={"output": llm_output.split("Final Answer:")[-1].strip()},
-                log=llm_output,
+                output = llm_output.split("Final Answer:")[-1].strip()
             )
+        
         else:
+            # Return raw output as finish
             return AgentFinish(
-                return_values={"output": "No final answer found."},
-                log=llm_output,
+                output = llm_output
             )
 
 
-output_parser = CustomOutputParser()
+output_parser = SimplifiedOutputParser()
 
 # OUTPUT PARSER END
 
