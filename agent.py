@@ -212,20 +212,13 @@ class CustomOutputParser(AgentOutputParser):
         )
 
 class SimplifiedOutputParser(AgentOutputParser):
-    def parse(self, llm_output: str) -> Union[AgentAction, AgentFinish]:
-        if "Final Answer:" in llm_output:
-            return AgentFinish(
-                return_values={"output": llm_output.split("Final Answer:")[-1].strip()},
-                log=llm_output,
-            )
-        else:
-            return AgentFinish(
-                return_values={"output": "No final answer found."},
-                log=llm_output,
-            )
+    def parse(self, llm_output: str) -> AgentFinish:
+        return AgentFinish(
+            output=llm_output
+        )
 
 
-output_parser = CustomOutputParser()
+output_parser = SimplifiedOutputParser()
 
 # OUTPUT PARSER END
 
@@ -235,7 +228,7 @@ output_parser = CustomOutputParser()
 
 #agent = PlanAndExecute(planner=planner, executor=executor, verbose=True)
 
-agent = LLMSingleActionAgent(
+agent = ConversationalAgent(
     llm_chain=llm_chain,
     output_parser=output_parser,
     stop=["\nObservation:"],
