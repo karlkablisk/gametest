@@ -119,8 +119,7 @@ When asked a question, follow this process:
 
 1. Think through the question out loud, analyzing and summarizing it.
 
-2. If needed, consider which tool from {tools} would be best to assist in answering the question. 
-   If no tool is needed, say so.
+2. You have NO TOOLS so skip to your final answer.
    
 3. Provide a thoughtful final answer to the question.
 
