@@ -19,7 +19,6 @@ from langchain.callbacks.streaming_stdout_final_only import FinalStreamingStdOut
 from langchain.utilities import SerpAPIWrapper
 from langchain.agents import load_tools
 #from langchain_experimental.plan_and_execute import PlanAndExecute, load_agent_executor, load_chat_planner
-from langchain.output_parsers import PydanticOutputParser
 
 #other imports
 import re
@@ -239,7 +238,7 @@ class SimplifiedOutputParser(AgentOutputParser):
             )
 
 
-output_parser = PydanticOutputParser()
+output_parser = null
 
 # OUTPUT PARSER END
 
