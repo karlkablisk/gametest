@@ -81,7 +81,7 @@ def Unknown(user_context: str) -> str:
     
 # TOOLS HERE -----------------------------------------------------    
 #tools = load_tools(["serpapi"])
-tools = "Final_Answer"
+tools = [Final_Answer]
 
 #tools_string
     
