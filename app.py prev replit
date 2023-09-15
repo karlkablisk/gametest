@@ -13,19 +13,25 @@ def fetch_discord_messages():
         if response.status_code == 200:
             discord_messages = response.json()
             for msg in discord_messages:
-                trigger_streamlit_with_discord_message(msg['message'])
+                # Update Streamlit UI with new messages
+                st.write(f"{msg['username']}: {msg['message']}")
         time.sleep(5)  # Poll every 5 seconds
 
-# Start a thread to fetch Discord messages
+# Run the fetch_discord_messages function in a separate thread
 from threading import Thread
 thread = Thread(target=fetch_discord_messages)
 thread.start()
 
+
 load_dotenv()
 
+# Webhook Configuration
 WEBHOOK_URL = st.secrets["WEBHOOK_URL"]
-FLASK_URL = 'http://Karldiscordbottodb.karlkablisk.repl.co/messages'
 
+# URL for the Flask app
+FLASK_URL = 'http://Karldiscordbottodb.karlkablisk.repl.co/messages'  # Replace with your Flask app URL
+
+# Initialize the agent executor
 agent_executor = agent.get_agent_executor()
 
 def fetch_messages():
@@ -39,23 +45,26 @@ def send_to_discord(message):
     payload = {'content': message}
     requests.post(WEBHOOK_URL, json=payload)
 
+# Streamlit UI
 st.title("Breeze-chan Chat")
-
-st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
-
 user_input = st.text_input("Enter your query:")
+
+# Initialize StreamlitCallbackHandler
+st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 
 if st.button("Send"):
     with st.container():
         result = agent_executor.run(user_input, callbacks=[st_cb])
         st.write(result)
         agent.memory.load_memory_variables([])
-        send_to_discord(result)
+        send_to_discord(result)  # Sending to Discord
         st.session_state['chat_memory'] = agent.memory.chat_memory
 
+# Sidebar
 with st.sidebar:
     st_description = st.text_input("log:")
     database_msgs = fetch_messages()
+    #st.write("Message History:", database_msgs)
 
     if st.button("Debug Test"):
         payload = {'content': 'Debug message from Streamlit'}
@@ -68,6 +77,16 @@ with st.sidebar:
         except ValueError:
             st.write("Invalid JSON response from server")
 
+# Debug printouts
+#st.write("Session State:", st.session_state)
+#st.write("Chat Message History:", msgs)
+#st.write("Conversation Memory:", agent.memory.chat_memory)
+
+# Output Messages
+database_msgs = fetch_messages()
+#st.write("Message History:", database_msgs)
+
+# Trigger Streamlit with Discord message
 def trigger_streamlit_with_discord_message(message):
     with st.container():
         result = agent_executor.run(message, callbacks=[st_cb])
@@ -75,3 +94,8 @@ def trigger_streamlit_with_discord_message(message):
         agent.memory.load_memory_variables([])
         send_to_discord(result)
         st.session_state['chat_memory'] = agent.memory.chat_memory
+
+# Test trigger from Discord
+#if st.button("Test Streamlit Trigger from Discord"):
+#    test_message = "Test message from Discord"
+   # trigger_streamlit_with_discord_message(test_message)
