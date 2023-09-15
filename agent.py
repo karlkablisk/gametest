@@ -131,7 +131,7 @@ Question: {question}
 
 Thoughts: 
 """
-
+ 
 
 class CustomPromptTemplate(StringPromptTemplate):
     template: str
