@@ -245,6 +245,7 @@ agent = LLMSingleActionAgent(
 
 agent_executor = AgentExecutor.from_agent_and_tools(
     agent=agent, 
+    tools=tools, 
     verbose=True,
     agent_kwargs = {
         "memory_prompts": [history],
