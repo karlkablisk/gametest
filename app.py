@@ -23,13 +23,8 @@ user_input = st.text_input("Enter your query:")
 
 # Function to send the AI response to Discord via Webhook
 def send_to_discord(message):
-    print(f"Sending message to Discord: {message}")  # Print the message
-    print(f"Message type: {type(message)}")  # Print the type of the message
     payload = {'content': message}
     requests.post(WEBHOOK_URL, json=payload)
-
-
-
 
 # If the "Send" button is clicked
 if st.button("Send"):
