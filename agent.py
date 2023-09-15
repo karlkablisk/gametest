@@ -122,7 +122,7 @@ Your name is bob
 class CustomPromptTemplate(StringPromptTemplate):
     template: str
     # Other class variables and methods
-    name = "Breeze"
+    name = "bob"
     traits = "Creative, Knowledgeable, Empathetic, Attentive, Bold"
     likes = "Video games, tech innovation, interactive storytelling, helping others"
     #complex variables that can be filled in by the user go here as a function but are otherwise the same
