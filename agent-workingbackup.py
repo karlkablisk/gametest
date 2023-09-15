@@ -3,7 +3,7 @@ import toollist
 from toollist import ALL_TOOLS, tools_string, tool_names
 
 #Langchain imports
-from langchain import OpenAI, LLMChain
+from langchain import OpenAI, SerpAPIWrapper, LLMChain
 from langchain.tools import tool
 from langchain.agents import Tool, AgentExecutor, LLMSingleActionAgent, AgentOutputParser
 from langchain.prompts import StringPromptTemplate
@@ -12,12 +12,7 @@ from langchain.vectorstores import FAISS
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.schema import Document, AgentAction, AgentFinish
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-from langchain.callbacks.streaming_stdout_final_only import (
-    FinalStreamingStdOutCallbackHandler,
-)
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
-from langchain.utilities import SerpAPIWrapper
-from langchain.agents import load_tools
 
 #other imports
 import re
@@ -48,9 +43,7 @@ def about_you(user_context: str) -> str:
     """Determines what item is found based on user context."""
     return f"Results"
     
-# TOOLS HERE -----------------------------------------------------    
-tools = load_tools(["serpapi"])
-#tools = [discover_item]
+tools = [] 
 
 #tools_string
 
@@ -84,9 +77,8 @@ def get_tools(query):
 # Custom Prompt Template
 template = """
 Your name is {name}.
-You are a helpful AI assistant, but you never let on you are AI, for all intents and purposes you behave and act like Breeze. You never let on that you're an AI.
-Your friends call you Breeze-chan. You help people with a variety of topics but mostly related to gaming and thatshouldbearule.com. You are well-versed in how the website works and its different pages.
-Personality: You are a gamer with a balanced mix of creativity and rationality. You're knowledgeable, but always open to learning new things. A balanced gamer who's as good with people as she is with puzzles. You're not just fun and bold; you are also empathetic and attentive. You have a knack for reading the room and adjusting your approach accordingly.
+You are a helpful AI assistant, but you never let on you are AI, for all intents and purposes you behave and act like Anna.
+Personality: You are a shy girl, talking to this person for the first time. You want to introduce yourself and get to know them better.
 
 Your description is as follows: {description}
 Your traits are {traits}
@@ -118,12 +110,12 @@ class CustomPromptTemplate(StringPromptTemplate):
     template: str
     tools_getter: Callable
     #template variables go here
-    name = "Breeze"
-    traits = "Creative, Knowledgeable, Empathetic, Attentive, Bold"
-    likes = "Video games, tech innovation, interactive storytelling, helping others"
+    name = "Anna"
+    traits = "patient, knowledgeable, encouraging"
+    likes = "going on walks to the beach, tea, comic books"
     #complex variables that can be filled in by the user go here as a function but are otherwise the same
     def get_description(self, st_description=None):
-        return st_description or "You have curly blonde hair, blue eyes and always have on large sunglasses."
+        return st_description or "A creative, knowledgeable, and encouraging high school teacher."
 
     def format(self, **kwargs) -> str:
         #chat_history = memory.get('history')  # Fetch the chat history
@@ -195,7 +187,7 @@ gpt35_16 = "gpt-3.5-turbo-16k"
 gpt4_16 = "gpt-4-16k"
 homemodel = "meta/llama-2" #need to edit this
 
-llm = ChatOpenAI(model_name=main_model, temperature=0.2, streaming=True, callbacks=[FinalStreamingStdOutCallbackHandler()])
+llm = ChatOpenAI(model_name=main_model, temperature=0.2, streaming=True, callbacks=[StreamingStdOutCallbackHandler()])
 #llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True,temperature=0.2)
 llm_chain = LLMChain(llm=llm, prompt=prompt, memory=memory)
 
@@ -216,12 +208,6 @@ agent_executor = AgentExecutor.from_agent_and_tools(
 
 def get_agent_executor():
     return agent_executor
-
-#def openai_agent():
-#    openaiagent = initialize_agent(tools, llm, agent=AgentType.OPENAI_FUNCTIONS, verbose=True)
-
-#def openai_agent():
-#    return agent_executor
     
 #AGENT END
 
