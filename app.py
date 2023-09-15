@@ -23,9 +23,10 @@ if st.button("Send"):
         result = agent_executor.run(user_input, callbacks=[st_cb])
         st.write(result)
         agent.memory.load_memory_variables([])
-        response = requests.post(FLASK_URL, json={'content': result})
+        response = requests.post(FLASK_URL, data=result)
         if response.status_code != 200:
             st.write(f"Failed to send message to Discord bot, status code: {response.status_code}")
+
 
 with st.sidebar:
     st_description = st.text_input("log:")
