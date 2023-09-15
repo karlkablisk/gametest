@@ -43,7 +43,9 @@ def about_you(user_context: str) -> str:
     """Determines what item is found based on user context."""
     return f"Results"
     
-tools = [] 
+# TOOLS HERE -----------------------------------------------------    
+tools = load_tools(["serpapi"])
+#tools = [discover_item]
 
 #tools_string
 
@@ -208,6 +210,12 @@ agent_executor = AgentExecutor.from_agent_and_tools(
 
 def get_agent_executor():
     return agent_executor
+
+#def openai_agent():
+#    openaiagent = initialize_agent(tools, llm, agent=AgentType.OPENAI_FUNCTIONS, verbose=True)
+
+#def openai_agent():
+#    return agent_executor
     
 #AGENT END
 
