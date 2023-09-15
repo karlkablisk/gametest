@@ -5,7 +5,7 @@ from toollist import ALL_TOOLS, tools_string, tool_names
 #Langchain imports
 from langchain import OpenAI, SerpAPIWrapper, LLMChain
 from langchain.tools import tool
-from langchain.agents import Tool, AgentExecutor, LLMSingleActionAgent, AgentOutputParser, initialize_agent, AgentType
+from langchain.agents import Tool, AgentExecutor, LLMSingleActionAgent, AgentOutputParser
 from langchain.prompts import StringPromptTemplate
 from langchain.chat_models import ChatOpenAI
 from langchain.vectorstores import FAISS
@@ -13,16 +13,9 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.schema import Document, AgentAction, AgentFinish
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
-from langchain.chains import ConversationChain
-from langchain.prompts import MessagesPlaceholder
-from langchain.callbacks.streaming_stdout_final_only import FinalStreamingStdOutCallbackHandler
-from langchain.utilities import SerpAPIWrapper
-from langchain.agents import load_tools
-#from langchain_experimental.plan_and_execute import PlanAndExecute, load_agent_executor, load_chat_planner
 
 #other imports
 import re
-import os
 from typing import List, Union, Callable
 from dotenv import load_dotenv
 import random
@@ -31,18 +24,6 @@ import streamlit as st
 
 load_dotenv()
 
-#LLM AND MODELS
-main_model = "gpt-3.5-turbo"
-strong_model = "gpt-4"
-gpt35_16 = "gpt-3.5-turbo-16k"
-gpt4_16 = "gpt-4-16k"
-homemodel = "meta/llama-2" #need to edit this
-
-#Planner and executor
-model = ChatOpenAI(model_name=main_model, temprature=0.2)
-
-#planner = load_chat_planner(model)
-#executor = load_agent_executor(model, tools, verbose=True)
 
 #ALL TOOLS
 
@@ -58,49 +39,24 @@ def discover_item(user_context: str) -> str:
     return f"Item Name: {item_name}, Description: {item_description}"
     
 @tool
-def about_ai(user_context: str) -> str:
-    """When the topic is about you the AI, you reflect on your own personality for the anwser."""
-    return f"Results"
-
-@tool
-def Memory(user_context: str) -> str:
-    """If the question is involving memory, you look to your memory banks for the answer.
-    This means remember, recall, and seeing if you know any personal facts about the speaker 
-    or things the speaker has done or said based on your interaction with them."""
-    return f"Results"
-
-@tool
-def Final_Answer(user_context: str) -> str:
-    """ALWAYS use this tool FIRST. You give the final answer to the question the user asked."""
-    return f"Results"
-
-@tool
-def Unknown(user_context: str) -> str:
-    """No tool is required parse the user's input using my own knowledge and jusdgement."""
+def about_you(user_context: str) -> str:
+    """Determines what item is found based on user context."""
     return f"Results"
     
-# TOOLS HERE -----------------------------------------------------    
-#tools = load_tools(["serpapi"])
-tools = [Final_Answer]
+tools = [] 
 
 #tools_string
+
+
     
 #TOOLS END
 
-
-
-llm = ChatOpenAI(model_name=main_model, temperature=0.2, streaming=True, callbacks=[FinalStreamingStdOutCallbackHandler()])
-#llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True,temperature=0.2)
-
-#LLM END
-
 #DATA STORAGE
-msgs = ChatMessageHistory(key="history")
+msgs = ChatMessageHistory(key="memory_key")
 embeddings = OpenAIEmbeddings()
 
 #memory start
-#memory = ConversationBufferMemory(memory_key="history", chat_memory=msgs, input_key="input", return_messages=True)
-memory = ConversationBufferMemory(memory_key="history", input_key="input", return_messages=True)
+memory = ConversationBufferMemory(memory_key="history", chat_memory=msgs, input_key="input", return_messages=True)
 
 
 docs = [Document(page_content=t.description, metadata={"index": i}) for i, t in enumerate(ALL_TOOLS)]
@@ -116,45 +72,50 @@ def get_tools(query):
 
 
 #DATA STORAGE END
-history = MessagesPlaceholder(variable_name="history")
+
 
 # Custom Prompt Template
 template = """
 Your name is {name}.
-You are a helpful AI assistant, but you maintain the persona of Breeze. You never let on that you're an AI.
-Your friends call you Breeze-chan.
-You help people with a variety of topics but mostly related to gaming and thatshouldbearule.com.
-You are well-versed in how the website works and its different pages.
-You NEVER speak on behalf of the user.
+You are a helpful AI assistant, but you never let on you are AI, for all intents and purposes you behave and act like Anna.
+Personality: You are a shy girl, talking to this person for the first time. You want to introduce yourself and get to know them better.
 
-Personality: You are a gamer with a balanced mix of creativity and rationality. You're knowledgeable, but always open to learning new things.
-You're not just fun and bold; you are also empathetic and attentive. You have a knack for reading the room and adjusting your approach accordingly.
+Your description is as follows: {description}
+Your traits are {traits}
+Your likes are {likes}
 
-Description: {description}
-Traits: {traits}
-Likes: {likes}
+You have access to the following tools:
 
-1. Think through the question out loud, analyzing and summarizing it.
+{tools}
 
-2. You dont have ANY tools, DONT try to use TOOLS.
-   
-3. Provide a thoughtful final answer to the question.
+Use the following format when talking:
+For simple statements you can just reply back. Skip to final answer and give a solid reply.
 
-Final Answer: 
+Question: the input question you must answer
+Thought: you should always think about what to do
+Action: the action to take, only if it sounds like its related to a tool, should you use one of [{tool_names}]
+If you try to access a tool that doesnt exsist, its ok, it means there isn't a tool for the situation and you should just reply back normally.
+only do the discover_item action once, then make up a name, a description and go straight to the final answer.
 
-{agent_scratchpad}
-"""
- 
+Action Input: the input to the action
+Observation: the result of the action
+... (this Thought/Action/Action Input/Observation can repeat N times)
+Thought: I now know the final answer
+Final Answer: the final answer to the original input question
+
+Question: {input}
+{agent_scratchpad}"""
 
 class CustomPromptTemplate(StringPromptTemplate):
     template: str
-    # Other class variables and methods
-    name = "Breeze"
-    traits = "Creative, Knowledgeable, Empathetic, Attentive, Bold"
-    likes = "Video games, tech innovation, interactive storytelling, helping others"
+    tools_getter: Callable
+    #template variables go here
+    name = "Anna"
+    traits = "patient, knowledgeable, encouraging"
+    likes = "going on walks to the beach, tea, comic books"
     #complex variables that can be filled in by the user go here as a function but are otherwise the same
     def get_description(self, st_description=None):
-        return st_description or "A balanced gamer who's as good with people as she is with puzzles."
+        return st_description or "A creative, knowledgeable, and encouraging high school teacher."
 
     def format(self, **kwargs) -> str:
         #chat_history = memory.get('history')  # Fetch the chat history
@@ -173,49 +134,38 @@ class CustomPromptTemplate(StringPromptTemplate):
         # Set the agent_scratchpad variable to that value
         kwargs["agent_scratchpad"] = thoughts
         ############## NEW ######################
-        # Get the best tool for the query
-        selected_tool = get_tools(kwargs.get("input", ""))[0] if get_tools(kwargs.get("input", "")) else "None"
-        
-        # Include the selected tool in thoughts
-        kwargs["agent_scratchpad"] += f"\nBest Tool: {selected_tool}\n"
-        
+        tools = self.tools_getter(kwargs["input"])
+        # Create a tools variable from the list of tools provided
+        kwargs["tools"] = "\n".join(
+            [f"{tool.name}: {tool.description}" for tool in tools]
+        )
+        # Create a list of tool names for the tools provided
+        kwargs["tool_names"] = ", ".join([tool.name for tool in tools])
         return self.template.format(**kwargs)
 
 prompt = CustomPromptTemplate(
     template=template,
-    tools=tools,
+    tools_getter=get_tools,
     input_variables=["input", "intermediate_steps"]
 )
 
-conversation = ConversationChain(
-    llm=llm,
-    verbose=True,
-    memory=memory
-)
 
 #TEMPLATE END
-
-
-#LLM CHAIN
-llm_chain = LLMChain(llm=llm, prompt=prompt, memory=memory)
-
 
 # Output Parser
 class CustomOutputParser(AgentOutputParser):
     def parse(self, llm_output: str) -> Union[AgentAction, AgentFinish]:
+        # Check if agent should finish
         if "Final Answer:" in llm_output:
             return AgentFinish(
                 return_values={"output": llm_output.split("Final Answer:")[-1].strip()},
                 log=llm_output,
             )
-
+        # Use a more robust regex pattern to match action and action input
         regex = r"Action\s*:\s*(.*?)\nAction\s*Input\s*:\s*(.*)"
         match = re.search(regex, llm_output, re.DOTALL)
-        
         if not match:
-            return AgentAction(
-                tool="Unknown", tool_input="", log=f"Could not parse LLM output: `{llm_output}`"
-            )
+            raise ValueError(f"Could not parse LLM output: `{llm_output}`")
         
         action = match.group(1).strip()
         action_input = match.group(2).strip(" ").strip('"')
@@ -224,59 +174,42 @@ class CustomOutputParser(AgentOutputParser):
             tool=action, tool_input=action_input, log=llm_output
         )
 
-class SimplifiedOutputParser(AgentOutputParser):
-    def parse(self, llm_output: str) -> Union[AgentAction, AgentFinish]:
-        if "Final Answer:" in llm_output:
-            return AgentFinish(
-                return_values={"output": llm_output.split("Final Answer:")[-1].strip()},
-                log=llm_output,
-            )
-        else:
-            return AgentFinish(
-                return_values={"output": "No final answer found."},
-                log=llm_output,
-            )
 
 
-output_parser = null
+output_parser = CustomOutputParser()
 
 # OUTPUT PARSER END
 
+#LLM AND MODELS
+main_model = "gpt-3.5-turbo"
+strong_model = "gpt-4"
+gpt35_16 = "gpt-3.5-turbo-16k"
+gpt4_16 = "gpt-4-16k"
+homemodel = "meta/llama-2" #need to edit this
 
+llm = ChatOpenAI(model_name=main_model, temperature=0.2, streaming=True, callbacks=[StreamingStdOutCallbackHandler()])
+#llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True,temperature=0.2)
+llm_chain = LLMChain(llm=llm, prompt=prompt, memory=memory)
 
 #AGENT AND EXECUTOR
-
-#agent = PlanAndExecute(planner=planner, executor=executor, verbose=True)
 
 agent = LLMSingleActionAgent(
     llm_chain=llm_chain,
     output_parser=output_parser,
     stop=["\nObservation:"],
+    allowed_tools=tool_names,
     handle_parsing_errors=True,
     verbose=True,
 )
 
 agent_executor = AgentExecutor.from_agent_and_tools(
-    agent=agent, 
-    tools=tools, 
-    verbose=True,
-    agent_kwargs = {
-        "memory_prompts": [history],
-        "input_variables": ["input", "chat_history"]
-    }    
+    agent=agent, tools=tools, verbose=True
 )
 
-def openai_agent():
-    openaiagent = initialize_agent(tools, llm, agent=AgentType.OPENAI_FUNCTIONS, verbose=True)
-
-#def get_agent_executor():
-#    return agent_executor
-
-def openai_agent():
+def get_agent_executor():
     return agent_executor
     
 #AGENT END
-
 
 
 
