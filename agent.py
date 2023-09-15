@@ -39,7 +39,8 @@ gpt4_16 = "gpt-4-16k"
 homemodel = "meta/llama-2" #need to edit this
 
 #Planner and executor
-model = ChatOpenAI(model_name=main_model, temprature=0)
+model_kwargs = {"temperature": .2}
+model = ChatOpenAI(model_name=main_model, model_kwargs=model_kwargs)
 
 #planner = load_chat_planner(model)
 #executor = load_agent_executor(model, tools, verbose=True)
