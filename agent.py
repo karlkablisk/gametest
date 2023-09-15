@@ -19,6 +19,7 @@ from langchain.callbacks.streaming_stdout_final_only import FinalStreamingStdOut
 from langchain.utilities import SerpAPIWrapper
 from langchain.agents import load_tools
 #from langchain_experimental.plan_and_execute import PlanAndExecute, load_agent_executor, load_chat_planner
+from langchain.output_parsers import PydanticOutputParser
 
 #other imports
 import re
@@ -225,23 +226,20 @@ class CustomOutputParser(AgentOutputParser):
         )
 
 class SimplifiedOutputParser(AgentOutputParser):
-
-    def parse(self, llm_output):
-        
+    def parse(self, llm_output: str) -> Union[AgentAction, AgentFinish]:
         if "Final Answer:" in llm_output:
-            # Return final answer
             return AgentFinish(
-                return_values={"output": llm_output.split("Final Answer:")[-1].strip()}
+                return_values={"output": llm_output.split("Final Answer:")[-1].strip()},
+                log=llm_output,
             )
-        
         else:
-            # Return raw output as finish
             return AgentFinish(
-                return_values={"output": llm_output} 
+                return_values={"output": "No final answer found."},
+                log=llm_output,
             )
 
 
-output_parser = SimplifiedOutputParser()
+output_parser = PydanticOutputParser()
 
 # OUTPUT PARSER END
 
