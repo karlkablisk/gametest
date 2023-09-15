@@ -231,13 +231,13 @@ class SimplifiedOutputParser(AgentOutputParser):
         if "Final Answer:" in llm_output:
             # Return final answer
             return AgentFinish(
-                output = llm_output.split("Final Answer:")[-1].strip()
+                return_values={"output": llm_output.split("Final Answer:")[-1].strip()}
             )
         
         else:
             # Return raw output as finish
             return AgentFinish(
-                output = llm_output
+                return_values={"output": llm_output} 
             )
 
 
