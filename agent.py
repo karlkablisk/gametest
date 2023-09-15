@@ -206,13 +206,7 @@ agent_executor = AgentExecutor.from_agent_and_tools(
     agent=agent, tools=tools, verbose=True
 )
 
-def openai_agent():
-    openaiagent = initialize_agent(tools, llm, agent=AgentType.OPENAI_FUNCTIONS, verbose=True)
-
-#def get_agent_executor():
-#    return agent_executor
-
-def openai_agent():
+def get_agent_executor():
     return agent_executor
     
 #AGENT END
