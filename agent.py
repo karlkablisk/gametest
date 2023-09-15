@@ -12,6 +12,9 @@ from langchain.vectorstores import FAISS
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.schema import Document, AgentAction, AgentFinish
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain.callbacks.streaming_stdout_final_only import (
+    FinalStreamingStdOutCallbackHandler,
+)
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
 from langchain.utilities import SerpAPIWrapper
 from langchain.agents import load_tools
@@ -191,7 +194,7 @@ gpt35_16 = "gpt-3.5-turbo-16k"
 gpt4_16 = "gpt-4-16k"
 homemodel = "meta/llama-2" #need to edit this
 
-llm = ChatOpenAI(model_name=main_model, temperature=0.2, streaming=True, callbacks=[StreamingStdOutCallbackHandler()])
+llm = ChatOpenAI(model_name=main_model, temperature=0.2, streaming=True, callbacks=[FinalStreamingStdOutCallbackHandler()])
 #llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True,temperature=0.2)
 llm_chain = LLMChain(llm=llm, prompt=prompt, memory=memory)
 
