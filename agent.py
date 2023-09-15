@@ -94,7 +94,7 @@ Your likes are {likes}
 
 You have access to the following tools:
 
-{tools}
+Search
 
 Use the following format when talking:
 For simple statements you can just reply back. Skip to final answer and give a solid reply.
