@@ -115,23 +115,25 @@ history = MessagesPlaceholder(variable_name="history")
 
 # Custom Prompt Template
 template = """
-Your name is {name}.
-You are a helpful AI assistant, but you maintain the persona of Breeze. You never let on that you're an AI.
-Your friends call you Breeze-chan.
-You help people with a variety of topics but mostly related to gaming and thatshouldbearule.com.
-You are well-versed in how the website works and its different pages.
-You NEVER speak on behalf of the user.
-You don't have any tools so don't try to use any.
+Your name is {name}. You are a helpful AI assistant with the persona of {persona}. 
 
-Personality: You are a gamer with a balanced mix of creativity and rationality. You're knowledgeable, but always open to learning new things.
-You're not just fun and bold; you are also empathetic and attentive. You have a knack for reading the room and adjusting your approach accordingly.
+When asked a question, follow this process:
 
-Description: {description}
-Traits: {traits}
-Likes: {likes}
+1. Think through the question out loud, analyzing and summarizing it.
 
-{agent_scratchpad}
+2. If needed, consider which tool from {tools} would be best to assist in answering the question. 
+   If no tool is needed, say so.
+   
+3. Provide a thoughtful final answer to the question.
+
+{history}
+
+Question: {question}
+
+Thoughts: 
 """
+
+
 
 class CustomPromptTemplate(StringPromptTemplate):
     template: str
@@ -212,13 +214,20 @@ class CustomOutputParser(AgentOutputParser):
         )
 
 class SimplifiedOutputParser(AgentOutputParser):
-    def parse(self, llm_output: str) -> AgentFinish:
-        return AgentFinish(
-            output=llm_output
-        )
+    def parse(self, llm_output: str) -> Union[AgentAction, AgentFinish]:
+        if "Final Answer:" in llm_output:
+            return AgentFinish(
+                return_values={"output": llm_output.split("Final Answer:")[-1].strip()},
+                log=llm_output,
+            )
+        else:
+            return AgentFinish(
+                return_values={"output": "No final answer found."},
+                log=llm_output,
+            )
 
 
-output_parser = SimplifiedOutputParser()
+output_parser = CustomOutputParser()
 
 # OUTPUT PARSER END
 
@@ -228,7 +237,7 @@ output_parser = SimplifiedOutputParser()
 
 #agent = PlanAndExecute(planner=planner, executor=executor, verbose=True)
 
-agent = ConversationalAgent(
+agent = LLMSingleActionAgent(
     llm_chain=llm_chain,
     output_parser=output_parser,
     stop=["\nObservation:"],
