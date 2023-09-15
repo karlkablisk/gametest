@@ -125,8 +125,6 @@ When asked a question, follow this process:
    
 3. Provide a thoughtful final answer to the question.
 
-{history}
-
 Question: {question}
 
 Thoughts: 
