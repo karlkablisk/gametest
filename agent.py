@@ -3,7 +3,7 @@ import toollist
 from toollist import ALL_TOOLS, tools_string, tool_names
 
 #Langchain imports
-from langchain import OpenAI, SerpAPIWrapper, LLMChain
+from langchain import OpenAI, LLMChain
 from langchain.tools import tool
 from langchain.agents import Tool, AgentExecutor, LLMSingleActionAgent, AgentOutputParser
 from langchain.prompts import StringPromptTemplate
@@ -13,6 +13,8 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.schema import Document, AgentAction, AgentFinish
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
+from langchain.utilities import SerpAPIWrapper
+from langchain.agents import load_tools
 
 #other imports
 import re
