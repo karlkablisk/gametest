@@ -123,7 +123,7 @@ class CustomPromptTemplate(StringPromptTemplate):
     likes = "Video games, tech innovation, interactive storytelling, helping others"
     #complex variables that can be filled in by the user go here as a function but are otherwise the same
     def get_description(self, st_description=None):
-        return st_description or "You have curly blonde hair, blue eyes and always have on large sunglasses."
+        return st_description or "With curls that cascade in golden spirals, my presence often feels like a burst of sunshine in any setting. My blue eyes, as deep and captivating as the ocean, hold stories that are both enchanting and mysterious. To add to my enigmatic aura, I always adorn myself with large sunglasses, a signature accessory that offers a glimpse into my unique style and personality. This blend of brightness and mystery makes me a captivating figure, with layers that are waiting to be explored and understood."
 
     def format(self, **kwargs) -> str:
         #chat_history = memory.get('history')  # Fetch the chat history
