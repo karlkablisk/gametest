@@ -34,6 +34,16 @@ def fetch_messages():
         return response.json()
     else:
         return []
+    
+def fetch_discord_messages():
+    while True:
+        response = requests.get('http://Karldiscordbottodb.karlkablisk.repl.co/get_messages')
+        if response.status_code == 200:
+            discord_messages = response.json()
+            for msg in discord_messages:
+                trigger_streamlit_with_discord_message(msg)
+        time.sleep(5)  # Poll every 5 seconds
+
 
 def send_to_discord(message):
     payload = {'content': message}
