@@ -5,6 +5,23 @@ from agent import msgs
 from dotenv import load_dotenv
 import requests
 import subprocess
+import time
+
+def fetch_discord_messages():
+    while True:
+        response = requests.get('http://Karldiscordbottodb.karlkablisk.repl.co/get_discord_messages')
+        if response.status_code == 200:
+            discord_messages = response.json()
+            for msg in discord_messages:
+                # Update Streamlit UI with new messages
+                st.write(f"{msg['username']}: {msg['message']}")
+        time.sleep(5)  # Poll every 5 seconds
+
+# Run the fetch_discord_messages function in a separate thread
+from threading import Thread
+thread = Thread(target=fetch_discord_messages)
+thread.start()
+
 
 load_dotenv()
 
