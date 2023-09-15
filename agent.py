@@ -169,8 +169,8 @@ class CustomOutputParser(AgentOutputParser):
                 return_values={"output": llm_output.split("Final Answer:")[-1].strip()},
                 log=llm_output,
             )
-        # Use a more robust regex pattern to match action and action input
-        regex = r"Action\s*:\s*(.*?)\nAction\s*Input\s*:\s*(.*)"
+        # Adjust regex pattern to match "Thought" and "Action" sections
+        regex = r"Thought\s*:\s*(.*?)\nAction\s*:\s*(.*)"
         match = re.search(regex, llm_output, re.DOTALL)
         if not match:
             raise ValueError(f"Could not parse LLM output: `{llm_output}`")
