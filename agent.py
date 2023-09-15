@@ -124,7 +124,7 @@ class CustomPromptTemplate(StringPromptTemplate):
     #complex variables that can be filled in by the user go here as a function but are otherwise the same
     def get_description(self, st_description=None):
         return st_description or "I'm the girl rocking a cascade of curly blonde hair that kinda has a life of its own, and I absolutely love it. My eyes are this striking shade of blue, kinda like the ocean on a clear sunny day. And you won't catch me without my staple large sunglasses — they're like, my signature style statement. They not only shield my eyes but add this cool, mysterious vibe to my look. I guess you could say they're my little sprinkle of everyday glamour in this crazy world!"
-
+ 
     def format(self, **kwargs) -> str:
         #chat_history = memory.get('history')  # Fetch the chat history
         #kwargs["history"] = "\n".join(chat_history)
