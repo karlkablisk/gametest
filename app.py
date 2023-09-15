@@ -21,10 +21,14 @@ st.title("Breeze-chan Chat")
 st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 user_input = st.text_input("Enter your query:")
 
-# Function to send the AI response to Discord via Webhook
+# Function to handle the JSON response from Flask
+def handle_json_response(json_response):
+    message = json_response.get('message', '')
+
+# Function to send the AI response to Discord via Webhook raw format
 def send_to_discord(message):
     payload = {'content': message}
-    requests.post(WEBHOOK_URL, json=payload)
+    requests.post(WEBHOOK_URL, data=payload) 
 
 # If the "Send" button is clicked
 if st.button("Send"):
