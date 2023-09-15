@@ -20,7 +20,7 @@ agent_executor = agent.get_agent_executor()
 st.title("Breeze-chan Chat")
 st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 user_input = st.text_input("Enter your query:")
-
+ 
 # Function to handle the JSON response from Flask
 def handle_json_response(json_response):
     message = json_response.get('message', '')
