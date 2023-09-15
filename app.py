@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 import requests
 import threading
 from threading import Thread
-import time 
 
 
 load_dotenv()
@@ -26,7 +25,7 @@ if st.button("Send"):
         agent.memory.load_memory_variables([])
         response = requests.post(FLASK_URL, json={'content': result})
         if response.status_code != 200:
-            st.write(f"Failed to send message to Discord bot, status code: {response.status_code}, Response text: {response.text}")  # Added response.text here
+            st.write(f"Failed to send message to Discord bot, status code: {response.status_code}")
 
 with st.sidebar:
     st_description = st.text_input("log:")
@@ -38,8 +37,7 @@ def trigger_streamlit_with_discord_message(message):
         agent.memory.load_memory_variables([])
         response = requests.post(FLASK_URL, json={'content': result})
         if response.status_code != 200:
-            st.write(f"Failed to send message to Discord bot, status code: {response.status_code}, Response text: {response.text}")  # Added response.text here
-
+            st.write(f"Failed to send message to Discord bot, status code: {response.status_code}")
 
 def fetch_discord_messages():
     while True:
