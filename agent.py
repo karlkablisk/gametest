@@ -161,9 +161,11 @@ prompt = CustomPromptTemplate(
 
 #TEMPLATE END
 
-# Output Parser
 class CustomOutputParser(AgentOutputParser):
     def parse(self, llm_output: str) -> Union[AgentAction, AgentFinish]:
+        # Log the format of the output without changing it
+        print(f"LLM Output Format: {type(llm_output)}, Content: {llm_output}")
+
         # Check if agent should finish
         if "Final Answer:" in llm_output:
             return AgentFinish(
