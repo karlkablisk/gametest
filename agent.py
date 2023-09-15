@@ -108,18 +108,21 @@ def get_tools(query):
     return [tools[d.metadata["index"]] for d in docs if 0 <= d.metadata["index"] < len(tools)]
 
 
- 
+
 
 #DATA STORAGE END
 history = MessagesPlaceholder(variable_name="history")
 
 # Custom Prompt Template
 template = """
+Your name is {name}. You are a helpful AI assistant with the persona of {persona}. 
+
 When asked a question, follow this process:
 
 1. Think through the question out loud, analyzing and summarizing it.
 
-2. You have NO TOOLS so skip to your final answer.
+2. If needed, consider which tool from {tools} would be best to assist in answering the question. 
+   If no tool is needed, say so.
    
 3. Provide a thoughtful final answer to the question.
 
