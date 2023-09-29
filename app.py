@@ -30,7 +30,7 @@ def send_to_discord(message):
 # If the "Send" button is clicked
 if st.button("Send"):
     with st.container():
-        result = agent_executor.run(user_input, callbacks=[FinalStreamingStdOutCallbackHandler])
+        result = agent_executor.run(user_input, callbacks=[st_cb])
         st.write(result)
         agent.memory.load_memory_variables([])
         send_to_discord(result)  # Sending the AI response to Discord
