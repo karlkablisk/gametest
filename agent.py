@@ -34,14 +34,18 @@ class MyCustomCallback(FinalStreamingStdOutCallbackHandler):
     def __init__(self):
         super().__init__()
         self.st_cb_result = ""
-    
+        self.final_tokens = []
+
     def set_st_cb_result(self, result):
         self.st_cb_result = result
-    
+
     def on_llm_new_token(self, token, **kwargs):
         super().on_llm_new_token(token, **kwargs)
         if token not in self.st_cb_result:
-            st.write(token)
+            self.final_tokens.append(token)
+            joined_text = ' '.join(self.final_tokens).replace("Final Answer :", "").strip()
+            st.write(joined_text)
+
 
 
 #ALL TOOLS
