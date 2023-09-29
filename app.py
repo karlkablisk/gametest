@@ -34,17 +34,9 @@ def send_to_discord(message):
 # If the "Send" button is clicked
 if st.button("Send"):
     with st.container():
-        # Reset token buffer before running the agent
-        my_custom_callback_instance.token_buffer = ""
-
+        # Include your custom callback instance in the callbacks list
         result = agent_executor.run(user_input, callbacks=[st_cb, my_custom_callback_instance])
-        
-        # Get collected tokens from custom callback
-        collected_tokens = my_custom_callback_instance.get_collected_tokens()
-        
-        if collected_tokens:
-            st.write(collected_tokens)
-        
+        #st.write(result)
         agent.memory.load_memory_variables([])
         send_to_discord(result)
 
