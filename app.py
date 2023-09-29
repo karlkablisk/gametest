@@ -36,7 +36,7 @@ if st.button("Send"):
     with st.container():
         # Include your custom callback instance in the callbacks list
         result = agent_executor.run(user_input, callbacks=[st_cb, my_custom_callback_instance])
-        st.write(result)
+        #st.write(result)
         agent.memory.load_memory_variables([])
         send_to_discord(result)
 
