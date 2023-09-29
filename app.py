@@ -16,6 +16,7 @@ class CustomStreamlitCallbackHandler(StreamlitCallbackHandler):
         self.final_result = ""
 
     def on_llm_new_token(self, token, **kwargs):
+        print(f"Received new token: {token}")  # This will appear in the console log
         self.final_result += token
         st.write(self.final_result, key="final_result")
 
