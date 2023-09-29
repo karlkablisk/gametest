@@ -172,18 +172,24 @@ class CustomOutputParser(AgentOutputParser):
                     return_values={"output": llm_output.split("Final Answer:")[-1].strip()},
                     log=llm_output,
                 )
-
+            
             regex = r"Action\s*:\s*(.*?)\nAction\s*Input\s*:\s*(.*)"
             match = re.search(regex, llm_output, re.DOTALL)
-            if not match:
-                raise ValueError(f"Could not parse LLM output. Unparsable text: `{llm_output}`")
-
-            action = match.group(1).strip()
-            action_input = match.group(2).strip(" ").strip('"')
-
-            return AgentAction(
-                tool=action, tool_input=action_input, log=llm_output
-            )
+            if match:
+                action = match.group(1).strip()
+                action_input = match.group(2).strip(" ").strip('"')
+                return AgentAction(
+                    tool=action, tool_input=action_input, log=llm_output
+                )
+            
+            # New parsing logic for greetings or other messages
+            if "How can I assist you today?" in llm_output or "How can I help you today?" in llm_output:
+                return AgentAction(
+                    tool="Greeting", tool_input=llm_output, log=llm_output
+                )
+            
+            # Fallback for unparsable text
+            raise ValueError(f"Could not parse LLM output. Unparsable text: `{llm_output}`")
         
         except Exception as e:
             raise Exception(f"Error occurred: {e}. Unparsed LLM output: `{llm_output}`")
