@@ -10,6 +10,15 @@ import time
 
 load_dotenv()
 
+class CustomStreamlitCallbackHandler(StreamlitCallbackHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.final_result = ""
+
+    def on_llm_new_token(self, token, **kwargs):
+        self.final_result += token
+        st.write(self.final_result, key="final_result")
+
 # URLs configuration
 FLASK_URL = 'http://Karldiscordbottodb.karlkablisk.repl.co/messages'
 DISCORD_FETCH_URL = 'http://Karldiscordbottodb.karlkablisk.repl.co/get_discord_messages'
@@ -20,7 +29,9 @@ agent_executor = agent.get_agent_executor()
 
 # Initialize Streamlit UI elements
 st.title("Breeze-chan Chat")
-st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
+#st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
+st_cb = CustomStreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
+
 user_input = st.text_input("Enter your query:")
 
 # Function to send the AI response to Discord via Webhook
