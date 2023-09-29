@@ -35,6 +35,7 @@ class MyCustomCallback(FinalStreamingStdOutCallbackHandler):
     def __init__(self):
         super().__init__()
         self.final_tokens = []
+        self.is_collecting = False
         self.st_cb_result = None
 
     def set_st_cb_result(self, result):
@@ -44,14 +45,23 @@ class MyCustomCallback(FinalStreamingStdOutCallbackHandler):
         super().on_llm_new_token(token, **kwargs)
         clean_token = re.sub(r'\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d+\]', '', token).strip()
 
-        if "Final Answer :" in clean_token:
-            self.final_tokens = []
+        if "Thought:" in clean_token:
+            self.is_collecting = False
 
-        self.final_tokens.append(clean_token)
+        if "Final Answer :" in clean_token:
+            self.is_collecting = True
+            self.final_tokens = []
+            
+        if self.is_collecting:
+            self.final_tokens.append(clean_token)
+
         if clean_token.endswith("?") or clean_token.endswith("!") or clean_token.endswith("."):
-            joined_text = ' '.join(self.final_tokens).replace("Final Answer :", "").strip()
-            st_write(joined_text)
-            self.final_tokens = []  # Reset for next sentence
+            if self.is_collecting:
+                joined_text = ''.join(self.final_tokens).replace("Final Answer :", "").strip()
+                st_write(joined_text)
+                self.is_collecting = False
+                self.final_tokens = []  # Reset for next sentence
+
 
 
 
