@@ -164,25 +164,30 @@ prompt = CustomPromptTemplate(
 # Output Parser
 class CustomOutputParser(AgentOutputParser):
     def parse(self, llm_output: str) -> Union[AgentAction, AgentFinish]:
-        # Check if agent should finish
-        if "Final Answer:" in llm_output:
-            return AgentFinish(
-                return_values={"output": llm_output.split("Final Answer:")[-1].strip()},
-                log=llm_output,
+        try:
+            # Existing parsing logic...
+            if "Final Answer:" in llm_output:
+                return AgentFinish(
+                    return_values={"output": llm_output.split("Final Answer:")[-1].strip()},
+                    log=llm_output,
+                )
+            
+            regex = r"Action\s*:\s*(.*?)\nAction\s*Input\s*:\s*(.*)"
+            match = re.search(regex, llm_output, re.DOTALL)
+            if not match:
+                raise ValueError(f"Could not parse LLM output: `{llm_output}`")
+            
+            action = match.group(1).strip()
+            action_input = match.group(2).strip(" ").strip('"')
+            
+            return AgentAction(
+                tool=action, tool_input=action_input, log=llm_output
             )
-        # Use a more robust regex pattern to match action and action input
-        regex = r"Action\s*:\s*(.*?)\nAction\s*Input\s*:\s*(.*)"
-        match = re.search(regex, llm_output, re.DOTALL)
-        if not match:
-            raise ValueError(f"Could not parse LLM output: `{llm_output}`")
         
-        action = match.group(1).strip()
-        action_input = match.group(2).strip(" ").strip('"')
-        
-        return AgentAction(
-            tool=action, tool_input=action_input, log=llm_output
-        )
-
+        except Exception as e:
+            print(f"Error occurred: {e}")
+            print(f"Unparsed LLM output: `{llm_output}`")
+            raise
 
 
 output_parser = CustomOutputParser()
