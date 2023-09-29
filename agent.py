@@ -30,16 +30,12 @@ from typing import Union
 from streamlit import write as st_write
 
 load_dotenv()
-import re
-import streamlit as st
 
 class MyCustomCallback(FinalStreamingStdOutCallbackHandler):
     def __init__(self):
         super().__init__()
         self.final_tokens = []
-        self.is_collecting = False
         self.st_cb_result = None
-        self.text_area = st.empty()  # Initialize an empty Streamlit element
 
     def set_st_cb_result(self, result):
         self.st_cb_result = result
@@ -48,23 +44,14 @@ class MyCustomCallback(FinalStreamingStdOutCallbackHandler):
         super().on_llm_new_token(token, **kwargs)
         clean_token = re.sub(r'\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d+\]', '', token).strip()
 
-        if "Thought:" in clean_token:
-            self.is_collecting = False
-
         if "Final Answer :" in clean_token:
-            self.is_collecting = True
             self.final_tokens = []
 
-        if self.is_collecting:
-            self.final_tokens.append(clean_token)
-
+        self.final_tokens.append(clean_token)
         if clean_token.endswith("?") or clean_token.endswith("!") or clean_token.endswith("."):
-            if self.is_collecting:
-                joined_text = ''.join(self.final_tokens).replace("Final Answer :", "").strip()
-                self.text_area.text(joined_text)  # Update the Streamlit element
-                self.is_collecting = False
-                self.final_tokens = []  # Reset for next sentence
-
+            joined_text = ' '.join(self.final_tokens).replace("Final Answer :", "").strip()
+            st_write(joined_text)
+            self.final_tokens = []  # Reset for next sentence
 
 
 
