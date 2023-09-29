@@ -166,13 +166,14 @@ prompt = CustomPromptTemplate(
 class CustomOutputParser(AgentOutputParser):
     def parse(self, llm_output: str) -> Union[AgentAction, AgentFinish]:
         try:
-            # Existing parsing logic...
+            # For complex outputs with "Final Answer:"
             if "Final Answer:" in llm_output:
                 return AgentFinish(
                     return_values={"output": llm_output.split("Final Answer:")[-1].strip()},
                     log=llm_output,
                 )
             
+            # For complex outputs with Thought/Action/Action Input/Observation cycles
             regex = r"Action\s*:\s*(.*?)\nAction\s*Input\s*:\s*(.*)"
             match = re.search(regex, llm_output, re.DOTALL)
             if match:
@@ -182,10 +183,11 @@ class CustomOutputParser(AgentOutputParser):
                     tool=action, tool_input=action_input, log=llm_output
                 )
             
-            # New parsing logic for greetings or other messages
-            if "How can I assist you today?" in llm_output or "How can I help you today?" in llm_output:
-                return AgentAction(
-                    tool="Greeting", tool_input=llm_output, log=llm_output
+            # For simple outputs
+            if not any(keyword in llm_output for keyword in ["Action:", "Thought:", "Action Input:", "Observation:"]):
+                return AgentFinish(
+                    return_values={"output": llm_output.strip()},
+                    log=llm_output,
                 )
             
             # Fallback for unparsable text
