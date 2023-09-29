@@ -34,24 +34,16 @@ load_dotenv()
 class MyCustomCallback(FinalStreamingStdOutCallbackHandler):
     def __init__(self):
         super().__init__()
-        self.final_tokens = []
-        self.st_cb_result = None
-
+        self.st_cb_result = ""
+    
     def set_st_cb_result(self, result):
         self.st_cb_result = result
-
+    
     def on_llm_new_token(self, token, **kwargs):
         super().on_llm_new_token(token, **kwargs)
-        clean_token = re.sub(r'\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d+\]', '', token).strip()
+        if token not in self.st_cb_result:
+            st.write(token)
 
-        if "Final Answer :" in clean_token:
-            self.final_tokens = []
-
-        self.final_tokens.append(clean_token)
-        if clean_token.endswith("?") or clean_token.endswith("!") or clean_token.endswith("."):
-            joined_text = ' '.join(self.final_tokens).replace("Final Answer :", "").strip()
-            st_write(joined_text)
-            self.final_tokens = []  # Reset for next sentence
 
 
 
