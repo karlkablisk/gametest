@@ -2,7 +2,7 @@ import streamlit as st
 from langchain.callbacks import StreamlitCallbackHandler
 from langchain.callbacks.streaming_stdout_final_only import FinalStreamingStdOutCallbackHandler
 import agent
-
+from agent import MyCustomCallback
 from dotenv import load_dotenv
 import requests
 from threading import Thread
@@ -10,14 +10,8 @@ import time
 
 load_dotenv()
 
-class CustomStreamlitCallbackHandler(StreamlitCallbackHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.final_result = ""
-
-    def on_llm_new_token(self, token, **kwargs):
-        self.final_result += token
-        st.write(self.final_result, key="final_result")
+# Instantiate MyCustomCallback
+my_custom_callback_instance = MyCustomCallback()
 
 # URLs configuration
 FLASK_URL = 'http://Karldiscordbottodb.karlkablisk.repl.co/messages'
@@ -29,10 +23,7 @@ agent_executor = agent.get_agent_executor()
 
 # Initialize Streamlit UI elements
 st.title("Breeze-chan Chat")
-#st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
-st_cb = CustomStreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
-
-
+st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 user_input = st.text_input("Enter your query:")
 
 # Function to send the AI response to Discord via Webhook
@@ -43,10 +34,11 @@ def send_to_discord(message):
 # If the "Send" button is clicked
 if st.button("Send"):
     with st.container():
-        result = agent_executor.run(user_input, callbacks=[st_cb])
-        # Removed 'st.write(result)' to use Custom StreamlitCallbackHandler
+        # Include your custom callback instance in the callbacks list
+        result = agent_executor.run(user_input, callbacks=[st_cb, my_custom_callback_instance])
+        st.write(result)
         agent.memory.load_memory_variables([])
-        send_to_discord(result)  # Sending the AI response to Discord
+        send_to_discord(result)
 
 # Sidebar configuration
 with st.sidebar:
