@@ -189,6 +189,10 @@ class CustomOutputParser(AgentOutputParser):
                     return_values={"output": llm_output.strip()},
                     log=llm_output,
                 )
+
+            # For intermediate "Thoughts" that don't need action
+            if "Thought:" in llm_output or "I should" in llm_output:
+                return AgentContinue(log=llm_output)
             
             # Fallback for unparsable text
             raise ValueError(f"Could not parse LLM output. Unparsable text: `{llm_output}`")
