@@ -35,22 +35,22 @@ class MyCustomCallback(FinalStreamingStdOutCallbackHandler):
     def __init__(self):
         super().__init__()
         self.final_tokens = []
-        self.is_accumulating = False  # A flag to determine when to accumulate tokens
+        self.is_accumulating = False
 
     def on_llm_new_token(self, token, **kwargs):
         super().on_llm_new_token(token, **kwargs)
-        
-        if "Thought :" in token or "Action :" in token:
-            self.is_accumulating = False  # Do not accumulate for Thoughts or Actions
+        clean_token = re.sub(r'\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d+\]', '', token).strip()
 
-        elif "Final Answer :" in token or not any(key in token for key in ["Thought :", "Action :"]):
-            self.is_accumulating = True  # Start accumulating if it is "Final Answer" or plain text
+        if "Thought :" in clean_token or "Action :" in clean_token:
+            self.is_accumulating = False
+
+        elif "Final Answer :" in clean_token or not any(key in clean_token for key in ["Thought :", "Action :"]):
+            self.is_accumulating = True
 
         if self.is_accumulating:
-            self.final_tokens.append(token)
-            joined_text = ' '.join(self.final_tokens)
-            joined_text = joined_text.replace("Final Answer :", "").strip()  # Remove "Final Answer :"
-            st_write(joined_text)  # Streamlit write
+            self.final_tokens.append(clean_token)
+            joined_text = ' '.join(self.final_tokens).replace("Final Answer :", "").strip()
+            st_write(joined_text)
 
 
 
