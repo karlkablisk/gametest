@@ -31,9 +31,17 @@ from typing import Union
 load_dotenv()
 
 class MyCustomCallback(FinalStreamingStdOutCallbackHandler):
+    def __init__(self):
+        super().__init__()
+        self.token_buffer = ""
+
     def on_llm_new_token(self, token, **kwargs):
         super().on_llm_new_token(token, **kwargs)
-        st.write(token) 
+        self.token_buffer += token
+
+    def get_collected_tokens(self):
+        return self.token_buffer.strip()
+
 
 #ALL TOOLS
 
