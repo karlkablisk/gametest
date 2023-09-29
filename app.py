@@ -16,7 +16,6 @@ class CustomStreamlitCallbackHandler(StreamlitCallbackHandler):
         self.final_result = ""
 
     def on_llm_new_token(self, token, **kwargs):
-        print(f"Received new token: {token}")  # This will appear in the console log
         self.final_result += token
         st.write(self.final_result, key="final_result")
 
@@ -44,7 +43,7 @@ def send_to_discord(message):
 if st.button("Send"):
     with st.container():
         result = agent_executor.run(user_input, callbacks=[st_cb])
-        st.write(result)
+        # Removed 'st.write(result)' to use Custom StreamlitCallbackHandler
         agent.memory.load_memory_variables([])
         send_to_discord(result)  # Sending the AI response to Discord
 
