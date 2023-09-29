@@ -175,7 +175,9 @@ class CustomOutputParser(AgentOutputParser):
             regex = r"Action\s*:\s*(.*?)\nAction\s*Input\s*:\s*(.*)"
             match = re.search(regex, llm_output, re.DOTALL)
             if not match:
+                print(f"Unparsable text: {llm_output}")  # Print or log the unparsable text
                 raise ValueError(f"Could not parse LLM output: `{llm_output}`")
+
             
             action = match.group(1).strip()
             action_input = match.group(2).strip(" ").strip('"')
