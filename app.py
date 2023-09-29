@@ -32,6 +32,7 @@ st.title("Breeze-chan Chat")
 #st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 st_cb = CustomStreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 
+
 user_input = st.text_input("Enter your query:")
 
 # Function to send the AI response to Discord via Webhook
