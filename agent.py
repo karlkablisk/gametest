@@ -32,17 +32,10 @@ from streamlit import write as st_write
 load_dotenv()
 
 class MyCustomCallback(FinalStreamingStdOutCallbackHandler):
-    def __init__(self):
-        super().__init__()
-        self.st_cb_result = ""
-    
-    def set_st_cb_result(self, result):
-        self.st_cb_result = result
-    
-    def on_llm_new_token(self, token, **kwargs):
-        super().on_llm_new_token(token, **kwargs)
-        if token not in self.st_cb_result:
-            st.write(token)
+    def __init__(self): super().__init__(); self.st_cb_result = ""
+    def set_st_cb_result(self, result): self.st_cb_result = result
+    def on_llm_new_token(self, token, **kwargs): super().on_llm_new_token(token, **kwargs);  if token not in self.st_cb_result: st.write(token)
+
 
 
 
