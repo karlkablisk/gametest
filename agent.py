@@ -26,6 +26,7 @@ from dotenv import load_dotenv
 import random
 from typing import Tuple, Optional
 import streamlit as st
+from typing import Union
 
 load_dotenv()
 
@@ -171,25 +172,21 @@ class CustomOutputParser(AgentOutputParser):
                     return_values={"output": llm_output.split("Final Answer:")[-1].strip()},
                     log=llm_output,
                 )
-            
+
             regex = r"Action\s*:\s*(.*?)\nAction\s*Input\s*:\s*(.*)"
             match = re.search(regex, llm_output, re.DOTALL)
             if not match:
-                print(f"Unparsable text: {llm_output}")  # Print or log the unparsable text
-                raise ValueError(f"Could not parse LLM output: `{llm_output}`")
+                raise ValueError(f"Could not parse LLM output. Unparsable text: `{llm_output}`")
 
-            
             action = match.group(1).strip()
             action_input = match.group(2).strip(" ").strip('"')
-            
+
             return AgentAction(
                 tool=action, tool_input=action_input, log=llm_output
             )
         
         except Exception as e:
-            print(f"Error occurred: {e}")
-            print(f"Unparsed LLM output: `{llm_output}`")
-            raise
+            raise Exception(f"Error occurred: {e}. Unparsed LLM output: `{llm_output}`")
 
 
 output_parser = CustomOutputParser()
