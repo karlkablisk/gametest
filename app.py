@@ -2,7 +2,7 @@ import streamlit as st
 from langchain.callbacks import StreamlitCallbackHandler
 from langchain.callbacks.streaming_stdout_final_only import FinalStreamingStdOutCallbackHandler
 import agent
-from agent import MyCustomCallback
+
 from dotenv import load_dotenv
 import requests
 from threading import Thread
