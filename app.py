@@ -1,5 +1,6 @@
 import streamlit as st
 from langchain.callbacks import StreamlitCallbackHandler
+from langchain.callbacks.streaming_stdout_final_only import FinalStreamingStdOutCallbackHandler
 import agent
 from dotenv import load_dotenv
 import requests
@@ -29,7 +30,7 @@ def send_to_discord(message):
 # If the "Send" button is clicked
 if st.button("Send"):
     with st.container():
-        result = agent_executor.run(user_input, callbacks=[st_cb])
+        result = agent_executor.run(user_input, callbacks=[FinalStreamingStdOutCallbackHandler])
         st.write(result)
         agent.memory.load_memory_variables([])
         send_to_discord(result)  # Sending the AI response to Discord
