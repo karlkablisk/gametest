@@ -36,6 +36,10 @@ class MyCustomCallback(FinalStreamingStdOutCallbackHandler):
         super().__init__()
         self.final_tokens = []
         self.is_accumulating = False
+        self.st_cb_result = None
+
+    def set_st_cb_result(self, result):
+        self.st_cb_result = result
 
     def on_llm_new_token(self, token, **kwargs):
         super().on_llm_new_token(token, **kwargs)
