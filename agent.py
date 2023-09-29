@@ -30,6 +30,10 @@ from typing import Union
 
 load_dotenv()
 
+class MyCustomCallback(FinalStreamingStdOutCallbackHandler):
+    def on_llm_new_token(self, token, **kwargs):
+        super().on_llm_new_token(token, **kwargs)
+        st.write(token) 
 
 #ALL TOOLS
 

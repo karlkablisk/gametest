@@ -2,12 +2,16 @@ import streamlit as st
 from langchain.callbacks import StreamlitCallbackHandler
 from langchain.callbacks.streaming_stdout_final_only import FinalStreamingStdOutCallbackHandler
 import agent
+from agent import MyCustomCallback
 from dotenv import load_dotenv
 import requests
 from threading import Thread
 import time
 
 load_dotenv()
+
+# Instantiate MyCustomCallback
+my_custom_callback_instance = MyCustomCallback()
 
 # URLs configuration
 FLASK_URL = 'http://Karldiscordbottodb.karlkablisk.repl.co/messages'
@@ -30,10 +34,11 @@ def send_to_discord(message):
 # If the "Send" button is clicked
 if st.button("Send"):
     with st.container():
-        result = agent_executor.run(user_input, callbacks=[st_cb])
+        # Include your custom callback instance in the callbacks list
+        result = agent_executor.run(user_input, callbacks=[st_cb, my_custom_callback_instance])
         st.write(result)
         agent.memory.load_memory_variables([])
-        send_to_discord(result)  # Sending the AI response to Discord
+        send_to_discord(result)
 
 # Sidebar configuration
 with st.sidebar:
