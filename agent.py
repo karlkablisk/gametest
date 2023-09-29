@@ -27,24 +27,30 @@ import random
 from typing import Tuple, Optional
 import streamlit as st
 from typing import Union
+from streamlit import write as st_write
 
 load_dotenv()
 
 class MyCustomCallback(FinalStreamingStdOutCallbackHandler):
     def __init__(self):
         super().__init__()
-        self.st_cb_result = ""
         self.final_tokens = []
-
-    def set_st_cb_result(self, result):
-        self.st_cb_result = result
+        self.is_accumulating = False  # A flag to determine when to accumulate tokens
 
     def on_llm_new_token(self, token, **kwargs):
         super().on_llm_new_token(token, **kwargs)
-        if token not in self.st_cb_result:
+        
+        if "Thought :" in token or "Action :" in token:
+            self.is_accumulating = False  # Do not accumulate for Thoughts or Actions
+
+        elif "Final Answer :" in token or not any(key in token for key in ["Thought :", "Action :"]):
+            self.is_accumulating = True  # Start accumulating if it is "Final Answer" or plain text
+
+        if self.is_accumulating:
             self.final_tokens.append(token)
-            joined_text = ' '.join(self.final_tokens).replace("Final Answer :", "").strip()
-            st.write(joined_text)
+            joined_text = ' '.join(self.final_tokens)
+            joined_text = joined_text.replace("Final Answer :", "").strip()  # Remove "Final Answer :"
+            st_write(joined_text)  # Streamlit write
 
 
 
