@@ -49,8 +49,8 @@ def about_you(user_context: str) -> str:
     return f"Results"
     
 # TOOLS HERE -----------------------------------------------------    
-tools = load_tools(["serpapi"])
-#tools = [discover_item]
+#tools = load_tools(["serpapi"])
+tools = [discover_item]
 
 #tools_string
 
