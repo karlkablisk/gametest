@@ -34,15 +34,19 @@ def send_to_discord(message):
 # If the "Send" button is clicked
 if st.button("Send"):
     with st.container():
-        result = agent_executor.run(user_input, callbacks=[st_cb])
+        result = agent_executor.run(user_input, callbacks=[])
         my_custom_callback_instance.set_st_cb_result(result)
         
+        #ai's filtered response
+        #ai_response = result['output']
+        #st.write(f"She said: {ai_response}")
+
         # Run the agent again with both callbacks
-        agent_executor.run(user_input, callbacks=[st_cb, my_custom_callback_instance])
+        #agent_executor.run(user_input, callbacks=[st_cb, my_custom_callback_instance])
         
         agent.memory.load_memory_variables([])
         send_to_discord(result)
-        st.write(f"payload:{payload}")
+        #st.write(f"payload:{payload}")
 
 
 # Sidebar configuration
