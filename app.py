@@ -44,7 +44,7 @@ if st.button("Send"):
         send_to_discord(result)
 
         #get output
-        ai_output = result["output"]
+        ai_output = result['output']
         st.write(f"She said: {ai_output}")
 
 
