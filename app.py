@@ -28,25 +28,21 @@ user_input = st.text_input("Enter your query:")
 
 # Function to send the AI response to Discord via Webhook
 def send_to_discord(message):
-    #payload = {'output': message}
-    requests.post(WEBHOOK_URL, message)
+    payload = {'content': message}
+    requests.post(WEBHOOK_URL, json=payload)
 
 # If the "Send" button is clicked
 if st.button("Send"):
     with st.container():
-        result = agent_executor(user_input, callbacks=[])
+        result = agent_executor.run(user_input, callbacks=[st_cb])
         my_custom_callback_instance.set_st_cb_result(result)
         
         # Run the agent again with both callbacks
-        #agent_executor.run(user_input, callbacks=[st_cb, my_custom_callback_instance])
+        agent_executor.run(user_input, callbacks=[st_cb, my_custom_callback_instance])
         
-        #get output
-        ai_output = result['output']
-        st.write(f"She said: {ai_output}")
-
-#send to discord
         agent.memory.load_memory_variables([])
-        send_to_discord(ai_output)
+        send_to_discord(result)
+
 
 # Sidebar configuration
 with st.sidebar:
