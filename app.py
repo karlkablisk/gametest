@@ -44,6 +44,7 @@ if st.button("Send"):
         ai_output = result['output']
         st.write(f"She said: {ai_output}")
 
+#send to discord
         agent.memory.load_memory_variables([])
         send_to_discord(ai_output)
 
