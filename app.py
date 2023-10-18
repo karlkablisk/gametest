@@ -28,7 +28,7 @@ user_input = st.text_input("Enter your query:")
 
 # Function to send the AI response to Discord via Webhook
 def send_to_discord(message):
-    payload = {'content': message}
+    payload = {'output': message}
     requests.post(WEBHOOK_URL, json=payload)
 
 # If the "Send" button is clicked
@@ -46,7 +46,7 @@ if st.button("Send"):
 
 #send to discord
         agent.memory.load_memory_variables([])
-        send_to_discord(ai_output)
+        send_to_discord(result)
 
 # Sidebar configuration
 with st.sidebar:
