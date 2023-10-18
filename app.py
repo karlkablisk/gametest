@@ -40,13 +40,12 @@ if st.button("Send"):
         # Run the agent again with both callbacks
         #agent_executor.run(user_input, callbacks=[st_cb, my_custom_callback_instance])
         
-        agent.memory.load_memory_variables([])
-        send_to_discord(result)
-
         #get output
         ai_output = result['output']
         st.write(f"She said: {ai_output}")
 
+        agent.memory.load_memory_variables([])
+        send_to_discord(ai_output)
 
 # Sidebar configuration
 with st.sidebar:
