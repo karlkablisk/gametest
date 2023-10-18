@@ -41,8 +41,8 @@ if st.button("Send"):
         #agent_executor.run(user_input, callbacks=[st_cb, my_custom_callback_instance])
         
         #get output
-        ai_output = result['output']
-        st.write(f"She said: {ai_output}")
+        #ai_output = result['output']
+        #st.write(f"She said: {ai_output}")
 
 #send to discord
         agent.memory.load_memory_variables([])
