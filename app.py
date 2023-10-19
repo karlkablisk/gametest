@@ -27,9 +27,12 @@ st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 user_input = st.text_input("Enter your query:")
 
 # Function to send the AI response to Discord via Webhook
-def send_to_discord(message):
-  payload = {'content': message}
-  requests.post(WEBHOOK_URL, data=payload)
+def send_to_discord(ai_response):
+    requests.post(WEBHOOK_URL, json={"content": ai_response})
+    #payload = {'content': message}
+    #requests.post(WEBHOOK_URL, data=message)
+    #requests.post(WEBHOOK_URL, json=payload)
+
 
 # If the "Send" button is clicked
 if st.button("Send"):
