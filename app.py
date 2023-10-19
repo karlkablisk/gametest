@@ -30,7 +30,7 @@ user_input = st.text_input("Enter your query:")
 def send_to_discord(ai_response):
     requests.post(WEBHOOK_URL, data={"content": "test"})
     #requests.post(FLASK_URL, data={"content": ai_response})
-    requests.post(FLASK_URL, json=payload)
+    #requests.post(FLASK_URL, json=payload)
     #payload = {'content': message}
     #requests.post(WEBHOOK_URL, data=message)
     #requests.post(WEBHOOK_URL, json=payload)
